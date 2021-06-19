@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 """
 Набор функций, позволяющих получить DataFrame-объекты
 для составления графических и текстовых отчетов.
 Содержит набор функций проверки формата.
-
 """
 
 import time
@@ -43,18 +43,16 @@ def phone_num(string):
 def load():
     """
     Загрузка данных
-
     Returns
     -------
     db - фрейм с данными
-
     """
     global db
     ftypes = [('Pickle файлы', '*.pic'), ('Все файлы', '*')]
     dlg = fld.Open(filetypes=ftypes)
     fl = dlg.show()
     if len(fl) != 0:
-        db = pd.read_excel(fl)
+        db = pd.read_pickle(fl)
     return 0
 
 
@@ -62,7 +60,18 @@ def end(root):
     root.destroy()
 
 
-def adding(fio, birth, child, vac, dep, prof, pay):
+def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
+    """
+    Добавляет строку в справочник workers
+    :param fio:  ФИО
+    :param birth: Дата рождения
+    :param child: ФИО Ребенка
+    :param vac: Наличие прививки
+    :param dep: Номер отдела
+    :param prof: Должность
+    :param pay: Заработная плата
+    :return:
+    """
     global db
     if False in [chars(fio), data(birth), chars(child), chars(vac), numerical(dep),
                  numerical(pay)]:
@@ -72,7 +81,55 @@ def adding(fio, birth, child, vac, dep, prof, pay):
         return False
 
 
-def deleting():
+def adding_to_children(fio, birth_ch, k_gard):
+    """
+    Добавляет строку в справочник children
+    :param fio: ФИО Ребенка
+    :param birth_ch: Дата рождения ребенка
+    :param k_gard: Номер садика
+    :return:
+    """
+    global db
+    if False in [chars(fio), data(birth_ch), numerical(k_gard)]:
+        return False
+    else:
+        db.loc[db.index.max() + 1] = [fio, birth_ch, k_gard]
+ 
+        
+def adding_to_otdeli(num, date, tel, num_workers):
+    """
+    Добавляет строку в справочник children
+    :param fio: ФИО Ребенка
+    :param birth_ch: Дата рождения ребенка
+    :param k_gard: Номер садика
+    :return:
+    """
+    global db
+    if False in [numerical(num), correct_data(date), correct_number(tel), numerical(num_workers)]:
+        return False
+    else:
+        db.loc[db.index.max() + 1] = [num, date, tel, num_workers]
+
+
+def deleting(index):
+    """
+        Удаляет строку по индексу.
+    Возвращает копию Dataframe.
+    :param index: индекс удаляемой строки
+    :return: копия Dataframe без строки.
+    """
+    global db
+    return db.drop([int(index)], inplace=False)
+
+
+def save(obj):
+    """
+        Сохраняет копию объекта DataFrame
+    в формате Pickle.
+    :param obj: полученный объект
+    :return:
+    """
+    obj.to_pickle('./data/db.pic')
     pass
 
 
@@ -96,7 +153,7 @@ def back_named_col(names):
     :param names: кортеж из наборов атрибутов
     :return: Множество полей в объекте DataFrame
     """
-    return db[names.split(',')]
+    return db[[s.strip() for s in names.split(',')]]
 
 
 def back_names_cond(names,
@@ -113,14 +170,16 @@ def back_names_cond(names,
     :return: набор атрибутов в объекте DataFrame
     """
     try:
-        return db.loc[db[by_name] == int(condition), names]
-    except:
-        return db.loc[db[by_name] == int(condition), names]
+        return db.loc[db[by_name] == int(condition),
+                      [s.strip() for s in names.split(',')]]
+    except ValueError:
+        return db.loc[db[by_name] == condition,
+                      [s.strip() for s in names.split(',')]]
 
 
 def back_many_cond(names,
-                   by_names: tuple,
-                   conditions: tuple):
+                   by_names: str,
+                   conditions: str):
     global db
     """
         Функция возвращает поля атрибутов names если параметры:
@@ -132,9 +191,20 @@ def back_many_cond(names,
     :param conditions: набор условий для каждого i-того имени
     :return:
     """
-    cond0 = db[by_names[0]] == conditions[0]
-    cond1 = db[by_names[1]] == conditions[1]
-    return db.loc[cond0 & cond1, names.split(',').strip()]
+    cond = [s.strip() for s in conditions.split(',')]
+    b_n = [s.strip() for s in by_names.split(',')]
+    # Проверка на числовые параметры
+    try:
+        cond0 = db[b_n[0]] == int(cond[0])
+    except ValueError:
+        cond0 = db[b_n[0]] == cond[0]
+
+    try:
+        cond1 = db[b_n[1]] == int(cond[1])
+    except ValueError:
+        cond1 = db[b_n[1]] == cond[1]
+
+    return db.loc[cond0 & cond1, [s.strip() for s in names.split(',')]]
 
 
 def correct_number(number):
@@ -173,3 +243,12 @@ def correct_data(data_str):
             return False
     else:
         return False
+
+def back_columns():
+    global db
+    return db.columns.get_level_values(0).tolist()
+
+def back_value_columns():
+    global db
+    columns = db.columns.get_level_values(0).tolist()
+    return []
