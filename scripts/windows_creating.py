@@ -1,46 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Набор функций для генерации окон приложения.
+Created on Thu Jun 17 20:48:12 2021
+
+@author: khusn
 """
 
 import tkinter as tk
 import numpy as np
 from tkinter import ttk
-from coms import adding, deleting, back_attr, back_named_col, back_names_cond, back_many_cond
+from coms import adding, deleting, back_attr,back_named_col,  back_names_cond, back_many_cond
 
-
-def add_combo(content,
-              box_name="workers"):
-    """
-    Создает combobox для нужного справочника
-    :param content: Объект TK
-    :param box_name: имя справочника
-    """
-    if box_name == "workers":
-        return ttk.Combobox(content,
-                            values=["ФИО",
-                                    "Дата рождения",
-                                    "ФИО Ребенка",
-                                    "Прививка от COVID-19",
-                                    "Номер отдела",
-                                    "Должность",
-                                    "З/П в месяц"])
-    elif box_name == "children":
-        return ttk.Combobox(content,
-                            values=["ФИО Ребенка",
-                                    "Дата рождения ребенка",
-                                    "Номер садика"])
-    elif box_name == "otdeli":
-        return ttk.Combobox(content,
-                            values=["Дата создания",
-                                    "Телефон",
-                                    "Количество сотрудников"])
-    else:
-        return ttk.Combobox(content,
-                            values=[" "])
-
-
-def add_row(content):
+def add_row(rt, content):
     """
     Создание окна для добавления записи в исходную базу данных
     """
@@ -62,7 +32,7 @@ def add_row(content):
     dep_entry = ttk.Entry(content, width=40)
     prof_entry = ttk.Entry(content, width=40)
     pay_entry = ttk.Entry(content, width=40)
-    add = tk.Button(content, text='Добавить запись', width=20, command=lambda: adding(
+    add = tk.Button(content, text='Добавить запись', width=20, command = lambda:adding(
         fio_entry.get(), birth_entry.get(), child_entry.get(), vac_entry.get(),
         dep_entry.get(), prof_entry.get(), pay_entry.get(),
     ))
@@ -89,18 +59,17 @@ def add_row(content):
     update.grid(column=3, row=10, columnspan=2)
     delete.grid(column=3, row=11, columnspan=2)
 
-
 def one_attr_search(rt, content):
     """
     Создание окна для поиска по одному атрибуту
     """
-
+    
     for widget in content.winfo_children():
         widget.destroy()
 
     t = tk.Text(content, width=70, height=30)
-    ys = ttk.Scrollbar(content, orient='vertical', command=t.yview)
-    xs = ttk.Scrollbar(content, orient='horizontal', command=t.xview)
+    ys = ttk.Scrollbar(content, orient = 'vertical', command = t.yview)
+    xs = ttk.Scrollbar(content, orient = 'horizontal', command = t.xview)
     t['yscrollcommand'] = ys.set
     t['xscrollcommand'] = xs.set
     t.insert(1.0, 'Здесь будет выводится текст отчета')
@@ -112,18 +81,10 @@ def one_attr_search(rt, content):
     df_label = tk.Label(content, text='Справочник')
     attr_label = tk.Label(content, text='Атрибут')
 
-    # добавлены ComboBox
-    df_entry = ttk.Combobox(content,
-                            values=["workers",
-                                    "children",
-                                    "otdeli"])
+    df_entry = ttk.Entry(content, textvariable=df, width=45)
+    attr_entry = ttk.Entry(content, textvariable=attr, width=45)
 
-    attr_entry = add_combo(content,
-                           box_name=df_entry.get())
-
-    button = tk.Button(content,
-                       text='Вывести',
-                       command=lambda: create_otchet_window(rt, back_attr(attr_entry.get())))
+    button = tk.Button(content, text='Вывести', command=lambda: create_otchet_window(rt, back_attr(attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
@@ -138,18 +99,17 @@ def one_attr_search(rt, content):
     content.grid_columnconfigure(0, weight=1)
     content.grid_rowconfigure(0, weight=1)
 
-
 def many_attr_search(rt, content):
     """
     Создание окна для поиска по нескольким атрибутам
     """
-
+    
     for widget in content.winfo_children():
         widget.destroy()
 
     t = tk.Text(content, width=70, height=30)
-    ys = ttk.Scrollbar(content, orient='vertical', command=t.yview)
-    xs = ttk.Scrollbar(content, orient='horizontal', command=t.xview)
+    ys = ttk.Scrollbar(content, orient = 'vertical', command = t.yview)
+    xs = ttk.Scrollbar(content, orient = 'horizontal', command = t.xview)
     t['yscrollcommand'] = ys.set
     t['xscrollcommand'] = xs.set
     t.insert(1.0, 'Здесь будет выводится текст отчета')
@@ -164,8 +124,7 @@ def many_attr_search(rt, content):
     df_entry = ttk.Entry(content, textvariable=df, width=45)
     attr_entry = ttk.Entry(content, textvariable=attr, width=45)
 
-    button = tk.Button(content, text='Вывести',
-                       command=lambda: create_otchet_window(rt, back_named_col(attr_entry.get())))
+    button = tk.Button(content, text='Вывести', command =lambda: create_otchet_window(rt, back_named_col(attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
@@ -180,18 +139,17 @@ def many_attr_search(rt, content):
     content.grid_columnconfigure(0, weight=1)
     content.grid_rowconfigure(0, weight=1)
 
-
 def one_attr_search_filter(rt, content):
     """
     Создание окна для поиска по одному атрибуту и условию
     """
-
+    
     for widget in content.winfo_children():
         widget.destroy()
 
     t = tk.Text(content, width=70, height=30)
-    ys = ttk.Scrollbar(content, orient='vertical', command=t.yview)
-    xs = ttk.Scrollbar(content, orient='horizontal', command=t.xview)
+    ys = ttk.Scrollbar(content, orient = 'vertical', command = t.yview)
+    xs = ttk.Scrollbar(content, orient = 'horizontal', command = t.xview)
     t['yscrollcommand'] = ys.set
     t['xscrollcommand'] = xs.set
     t.insert(1.0, 'Здесь будет выводится текст отчета')
@@ -212,10 +170,7 @@ def one_attr_search_filter(rt, content):
     filt_entry = ttk.Entry(content, textvariable=filt, width=45)
     val_entry = ttk.Entry(content, textvariable=val, width=45)
 
-    button = tk.Button(content, text='Вывести', command=lambda: create_otchet_window(rt,
-                                                                                     back_names_cond(attr_entry.get(),
-                                                                                                     filt_entry.get(),
-                                                                                                     val_entry.get())))
+    button = tk.Button(content, text='Вывести', command =lambda: create_otchet_window(rt, back_names_cond(attr_entry.get(), filt_entry.get(), val_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
@@ -234,18 +189,17 @@ def one_attr_search_filter(rt, content):
     content.grid_columnconfigure(0, weight=1)
     content.grid_rowconfigure(0, weight=1)
 
-
 def many_attr_search_filter(rt, content):
     """
     Создание окна для поиска по нескольким атрибутам и условиям
     """
-
+    
     for widget in content.winfo_children():
         widget.destroy()
 
     t = tk.Text(content, width=70, height=30)
-    ys = ttk.Scrollbar(content, orient='vertical', command=t.yview)
-    xs = ttk.Scrollbar(content, orient='horizontal', command=t.xview)
+    ys = ttk.Scrollbar(content, orient = 'vertical', command = t.yview)
+    xs = ttk.Scrollbar(content, orient = 'horizontal', command = t.xview)
     t['yscrollcommand'] = ys.set
     t['xscrollcommand'] = xs.set
     t.insert(1.0, 'Здесь будет выводится текст отчета')
@@ -266,10 +220,7 @@ def many_attr_search_filter(rt, content):
     filt_entry = ttk.Entry(content, textvariable=filt, width=45)
     val_entry = ttk.Entry(content, textvariable=val, width=45)
 
-    button = tk.Button(content, text='Вывести', command=lambda: create_otchet_window(rt,
-                                                                                     back_many_cond(attr_entry.get(),
-                                                                                                    filt_entry.get(),
-                                                                                                    val_entry.get())))
+    button = tk.Button(content, text='Вывести', command =lambda: create_otchet_window(rt, back_many_cond(attr_entry.get(), filt_entry.get(), val_entry.get())))
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
     df_label.grid(column=0, row=1)
@@ -287,10 +238,9 @@ def many_attr_search_filter(rt, content):
     content.grid_columnconfigure(0, weight=1)
     content.grid_rowconfigure(0, weight=1)
 
-
 def create_otchet_window(root, df):
     """
-    ATTENTION Это код полякова не ебу че тут творится
+    ATTENTION Это код полякова не ебу че тут твориться
     Создание окна текстового отчета
     """
     height = df.shape[0]
