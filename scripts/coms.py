@@ -158,10 +158,10 @@ def back_names_cond(names,
     """
     try:
         return db.loc[db[by_name] == int(condition),
-                      [s.strip for s in names.split(',')]]
-    except ValueError:
+                      [s.strip() for s in names.split(',')]]
+    except:
         return db.loc[db[by_name] == condition,
-                      [s.strip for s in names.split(',')]]
+                      [s.strip() for s in names.split(',')]]
 
 
 def back_many_cond(names,
@@ -180,7 +180,7 @@ def back_many_cond(names,
     """
     cond0 = db[by_names[0]] == conditions[0]
     cond1 = db[by_names[1]] == conditions[1]
-    return db.loc[cond0 & cond1, [s.strip for s in names.split(',')]]
+    return db.loc[cond0 & cond1, [s.strip() for s in names.split(',')]]
 
 
 def correct_number(number):
