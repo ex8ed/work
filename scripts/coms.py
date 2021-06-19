@@ -72,7 +72,25 @@ def adding(fio, birth, child, vac, dep, prof, pay):
         return False
 
 
-def deleting():
+def deleting(index):
+    global db
+    """
+        Удаляет строку по индексу.
+    Возвращает копию Dataframe.
+    :param index: индекс удаляемой строки
+    :return: копия Dataframe без строки.
+    """
+    return db.drop([int(index)], inplace=False)
+
+
+def save(obj):
+    """
+        Сохраняет копию объекта DataFrame
+    в формате Pickle.
+    :param obj: полученный объект
+    :return:
+    """
+    obj.to_pickle('./data/db.pic')
     pass
 
 
