@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Набор функций, позволяющих получить DataFrame-объекты
 для составления графических и текстовых отчетов.
@@ -165,8 +166,8 @@ def back_names_cond(names,
 
 
 def back_many_cond(names,
-                   by_names: tuple,
-                   conditions: tuple):
+                   by_names: str,
+                   conditions: str):
     global db
     """
         Функция возвращает поля атрибутов names если параметры:
@@ -178,8 +179,19 @@ def back_many_cond(names,
     :param conditions: набор условий для каждого i-того имени
     :return:
     """
-    cond0 = db[by_names[0]] == conditions[0]
-    cond1 = db[by_names[1]] == conditions[1]
+    cond = [s.strip() for s in conditions.split(',')]
+    b_n = [s.strip() for s in by_names.split(',')]
+    # Проверка на числовые параметры
+    try:
+        cond0 = db[b_n[0]] == int(cond[0])
+    except ValueError:
+        cond0 = db[b_n[0]] == cond[0]
+
+    try:
+        cond1 = db[b_n[1]] == int(cond[1])
+    except ValueError:
+        cond1 = db[b_n[1]] == cond[1]
+
     return db.loc[cond0 & cond1, [s.strip() for s in names.split(',')]]
 
 
