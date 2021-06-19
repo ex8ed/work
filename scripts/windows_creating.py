@@ -6,7 +6,7 @@
 import tkinter as tk
 import numpy as np
 from tkinter import ttk
-from coms import adding, deleting, back_attr, back_named_col, back_names_cond, back_many_cond
+from coms import adding_to_workers, deleting, back_attr, back_named_col, back_names_cond, back_many_cond
 
 
 def add_combo(content,
@@ -62,10 +62,13 @@ def add_row(content):
     dep_entry = ttk.Entry(content, width=40)
     prof_entry = ttk.Entry(content, width=40)
     pay_entry = ttk.Entry(content, width=40)
-    add = tk.Button(content, text='Добавить запись', width=20, command=lambda: adding(
-        fio_entry.get(), birth_entry.get(), child_entry.get(), vac_entry.get(),
-        dep_entry.get(), prof_entry.get(), pay_entry.get(),
-    ))
+    add = tk.Button(content, text='Добавить запись', width=20, command=lambda: adding_to_workers(fio_entry.get(),
+                                                                                                 birth_entry.get(),
+                                                                                                 child_entry.get(),
+                                                                                                 vac_entry.get(),
+                                                                                                 dep_entry.get(),
+                                                                                                 prof_entry.get(),
+                                                                                                 pay_entry.get()))
     update = tk.Button(content, text='Обновить запись', width=20)
     delete = tk.Button(content, text='Удалить запись', width=20, command=deleting)
 

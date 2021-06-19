@@ -62,7 +62,18 @@ def end(root):
     root.destroy()
 
 
-def adding(fio, birth, child, vac, dep, prof, pay):
+def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
+    """
+    Добавляет строку в справочник workers
+    :param fio:  ФИО
+    :param birth: Дата рождения
+    :param child: ФИО Ребенка
+    :param vac: Наличие прививки
+    :param dep: Номер отдела
+    :param prof: Должность
+    :param pay: Заработная плата
+    :return:
+    """
     global db
     if False in [chars(fio), data(birth), chars(child), chars(vac), numerical(dep),
                  numerical(pay)]:
@@ -72,14 +83,29 @@ def adding(fio, birth, child, vac, dep, prof, pay):
         return False
 
 
-def deleting(index):
+def adding_to_children(fio, birth_ch, k_gard):
+    """
+    Добавляет строку в справочник children
+    :param fio: ФИО Ребенка
+    :param birth_ch: Дата рождения ребенка
+    :param k_gard: Номер садика
+    :return:
+    """
     global db
+    if False in [chars(fio), data(birth_ch), numerical(k_gard)]:
+        return False
+    else:
+        db.loc[db.index.max() + 1] = [fio, birth_ch, k_gard]
+
+
+def deleting(index):
     """
         Удаляет строку по индексу.
     Возвращает копию Dataframe.
     :param index: индекс удаляемой строки
     :return: копия Dataframe без строки.
     """
+    global db
     return db.drop([int(index)], inplace=False)
 
 
