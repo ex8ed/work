@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jun 17 20:48:12 2021
-
-@author: khusn
+Главный скрипт.
+Задействует все модули программы.
 """
 
 # import os
