@@ -12,8 +12,7 @@ from tkinter import ttk
 from coms import load, end
 from windows_creating import add_workers_row, add_children_row, \
     add_otdeli_row, one_attr_search, many_attr_search, one_attr_search_filter, \
-    many_attr_search_filter, back_hist_rep, back_boxplot_rep, \
-    back_spread_rep, back_columns_rep
+    many_attr_search_filter, back_graph_rep 
 
 rt = tk.Tk()
 rt.geometry('1000x800')
@@ -39,11 +38,11 @@ text_report.add_command(label='Отчет по одному атрибуту с 
 text_report.add_command(label='Отчет по двум атрибутам', command = lambda: many_attr_search(rt, fr))
 text_report.add_command(label='Отчет по двум атрибутам с фильтром', command = lambda: many_attr_search_filter(rt, fr))
 
-graf_report = tk.Menu(mainmenu, tearoff=0)
-graf_report.add_command(label='Гистограмма', command = lambda: back_hist_rep(rt, fr))
-graf_report.add_command(label='Диаграмма Бокса-Уискера', command = lambda: back_boxplot_rep(rt, fr))
-graf_report.add_command(label='Диаграмма рассеивания', command = lambda: back_spread_rep(rt, fr))
-graf_report.add_command(label='Столбчатая диаграмма', command = lambda: back_columns_rep(rt, fr))
+# graf_report = tk.Menu(mainmenu, tearoff=0)
+# graf_report.add_command(label='Гистограмма', command = lambda: back_hist_rep(rt, fr))
+# graf_report.add_command(label='Диаграмма Бокса-Уискера', command = lambda: back_boxplot_rep(rt, fr))
+# graf_report.add_command(label='Диаграмма рассеивания', command = lambda: back_spread_rep(rt, fr))
+# graf_report.add_command(label='Столбчатая диаграмма', command = lambda: back_columns_rep(rt, fr))
 
 cfg = tk.Menu(mainmenu, tearoff=0)
 
@@ -53,7 +52,7 @@ help_menu.add_command(label='О приложении')
 
 mainmenu.add_cascade(label='Файл', menu=file)
 mainmenu.add_cascade(label='Текстовые отчеты', menu=text_report)
-mainmenu.add_cascade(label='Графические отчеты', menu=graf_report)
+mainmenu.add_command(label='Графические отчеты', command=lambda:back_graph_rep(rt, fr))
 mainmenu.add_cascade(label='Настройки', menu=cfg)
 mainmenu.add_cascade(label='Помощь', menu=help_menu)
 

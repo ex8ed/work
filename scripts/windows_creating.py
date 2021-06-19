@@ -359,6 +359,47 @@ def back_columns_rep(rt, content):
     value_attr_combobox.grid(column=4, row=1)
     button.grid(column=4, row=2)
     
+  
+def back_graph_rep(rt, content):
+    def on_click():
+        global reports
+        graph_type = graph_combobox.get()
+        print(graph_type == 'Гистограмма')
+        if graph_type == 'Гистограмма':
+            reports = ['1', '2', '3']
+        elif graph_type == 'Диаграмма Бокса-Уискера':
+            reports = ['1', '2']
+        elif graph_type == 'Диаграмма рассеивания':
+            reports = ['1']
+        elif graph_type == 'Столбчатая диаграмма':
+            reports = ['1', '2', '3', '4']
+        rep_combobox.configure(values=reports)
+        
+    for widget in content.winfo_children():
+        widget.destroy()
+    
+    reports = []
+    
+    dict_label = tk.Label(content, text='Выберите словарь', width=50)
+    graph_label = tk.Label(content, text='Выберите тип графика', width=50)
+    rep_label = tk.Label(content, text='Выберите графический отчет', width=50)
+    dict_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], width=50)
+    graph_combobox = ttk.Combobox(content, values=['Гистограмма', 'Диаграмма Бокса-Уискера', 'Диаграмма рассеивания', 'Столбчатая диаграмма'], width=50)
+    button_1 = tk.Button(content, text='Подтвердить', command=on_click)
+    rep_combobox = ttk.Combobox(content, values=reports, width=50)
+    button_2 = tk.Button(content, text='Вывести')
+    
+    content.grid(column=0, row=0)
+    dict_label.grid(column=0, row=0)
+    dict_combobox.grid(column=1, row=0)
+    graph_label.grid(column=0, row=1)
+    graph_combobox.grid(column=1, row=1)
+    button_1.grid(column=1, row=2)
+    rep_label.grid(column=0, row=3)
+    rep_combobox.grid(column=1, row=3)
+    button_2.grid(column=1, row=4)
+    
+    
 def create_otchet_window(root, text, df):
     """
     ATTENTION Это код полякова не ебу че тут твориться

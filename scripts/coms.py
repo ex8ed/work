@@ -8,6 +8,7 @@
 import time
 import re
 import pandas as pd
+import tkinter as tk
 from tkinter import filedialog as fld
 
 
@@ -52,7 +53,10 @@ def load():
     dlg = fld.Open(filetypes=ftypes)
     fl = dlg.show()
     if len(fl) != 0:
-        db = pd.read_pickle(fl)
+        db_w = pd.read_pickle('d:/work.project/work/data/workers.pic')
+        db_c = pd.read_pickle('d:/work.project/work/data/children.pic')
+        db_o = pd.read_pickle('d:/work.project/work/data/otdeli.pic')
+        tk.messagebox.showinfo('Файл', 'Файл открыт успешно')
     return 0
 
 
