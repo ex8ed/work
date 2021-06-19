@@ -96,7 +96,7 @@ def back_named_col(names):
     :param names: кортеж из наборов атрибутов
     :return: Множество полей в объекте DataFrame
     """
-    return db[names.split(',')]
+    return db[[s.strip() for s in names.split(',')]]
 
 
 def back_names_cond(names,
@@ -134,7 +134,7 @@ def back_many_cond(names,
     """
     cond0 = db[by_names[0]] == conditions[0]
     cond1 = db[by_names[1]] == conditions[1]
-    return db.loc[cond0 & cond1, names.split(',').strip()]
+    return db.loc[cond0 & cond1, [s.strip for s in names.split(',')]]
 
 
 def correct_number(number):
