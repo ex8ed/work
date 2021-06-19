@@ -307,23 +307,58 @@ def back_hist_rep(rt, content):
         
     label = tk.Label(content, text='Выберите два атрибута для построения гистограммы', width=50)
     name_attr_combobox = ttk.Combobox(content, values=back_columns(), width=50)
+    button = tk.Button(content, text='Вывести')
+    
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
     name_attr_combobox.grid(column=4, row=0)
+    button.grid(column=4, row=2)
     
 def back_boxplot_rep(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
         
-    label = tk.Label(content, text='Выберите два атрибута для построения гистограммы', width=50)
+    label = tk.Label(content, text='Выберите два атрибута для построения диаграммы Бокса-Уискера', width=50)
     name_attr_combobox = ttk.Combobox(content, values=back_columns(), width=50)
-    value_attr_combobox = ttk.Combobox(content, values=back_value_columns, width=50)
+    value_attr_combobox = ttk.Combobox(content, values=back_value_columns(), width=50)
+    button = tk.Button(content, text='Вывести')
+    
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
     name_attr_combobox.grid(column=4, row=0)
-    return 0
+    value_attr_combobox.grid(column=4, row=1)
+    button.grid(column=4, row=2)
     
-
+def back_spread_rep(rt, content):
+    for widget in content.winfo_children():
+        widget.destroy()
+        
+    label = tk.Label(content, text='Выберите два атрибута для построения диаграммы рассеивания', width=50)
+    name_attr_combobox = ttk.Combobox(content, values=back_columns(), width=50)
+    value_attr_combobox = ttk.Combobox(content, values=back_value_columns(), width=50)
+    button = tk.Button(content, text='Вывести')
+    
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0, columnspan=3)
+    name_attr_combobox.grid(column=4, row=0)
+    value_attr_combobox.grid(column=4, row=1)
+    button.grid(column=4, row=2)
+    
+def back_columns_rep(rt, content):
+    for widget in content.winfo_children():
+        widget.destroy()
+        
+    label = tk.Label(content, text='Выберите два атрибута для построения стобчатой диаграммы', width=50)
+    name_attr_combobox = ttk.Combobox(content, values=back_columns(), width=50)
+    value_attr_combobox = ttk.Combobox(content, values=back_value_columns(), width=50)
+    button = tk.Button(content, text='Вывести')
+    
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0, columnspan=3)
+    name_attr_combobox.grid(column=4, row=0)
+    value_attr_combobox.grid(column=4, row=1)
+    button.grid(column=4, row=2)
+    
 def create_otchet_window(root, text, df):
     """
     ATTENTION Это код полякова не ебу че тут твориться
