@@ -54,7 +54,7 @@ def load():
     dlg = fld.Open(filetypes=ftypes)
     fl = dlg.show()
     if len(fl) != 0:
-        db = pd.read_excel(fl)
+        db = pd.read_pickle(fl)
     return 0
 
 
