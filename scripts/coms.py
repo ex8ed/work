@@ -6,7 +6,6 @@
 
 """
 
-import time
 import re
 import pandas as pd
 from tkinter import filedialog as fld
@@ -22,14 +21,6 @@ def numerical(string):
     if string.strip().isdigit():
         return string
     return False
-
-
-def data(string):
-    try:
-        time.strptime(string, '%d.%m.%Y')
-        return string
-    except ValueError:
-        return False
 
 
 def phone_num(string):
@@ -76,7 +67,7 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     :return:
     """
     global db
-    if False in [chars(fio), data(birth), chars(child), chars(vac), numerical(dep),
+    if False in [chars(fio), correct_data(birth), chars(child), chars(vac), numerical(dep),
                  numerical(pay)]:
         return False
     else:
@@ -93,7 +84,7 @@ def adding_to_children(fio, birth_ch, k_gard):
     :return:
     """
     global db
-    if False in [chars(fio), data(birth_ch), numerical(k_gard)]:
+    if False in [chars(fio), correct_data(birth_ch), numerical(k_gard)]:
         return False
     else:
         db.loc[db.index.max() + 1] = [fio, birth_ch, k_gard]
