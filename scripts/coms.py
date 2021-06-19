@@ -113,9 +113,11 @@ def back_names_cond(names,
     :return: набор атрибутов в объекте DataFrame
     """
     try:
-        return db.loc[db[by_name] == int(condition), names]
-    except:
-        return db.loc[db[by_name] == int(condition), names]
+        return db.loc[db[by_name] == int(condition),
+                      [s.strip for s in names.split(',')]]
+    except ValueError:
+        return db.loc[db[by_name] == condition,
+                      [s.strip for s in names.split(',')]]
 
 
 def back_many_cond(names,
