@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Набор функций для генерации окон приложения.
-
 """
 
 import tkinter as tk
@@ -36,6 +35,9 @@ def add_combo(content,
                             values=["Дата создания",
                                     "Телефон",
                                     "Количество сотрудников"])
+    else:
+        return ttk.Combobox(content,
+                            values=[" "])
 
 
 def add_row(content):
@@ -115,6 +117,7 @@ def one_attr_search(rt, content):
                             values=["workers",
                                     "children",
                                     "otdeli"])
+
     attr_entry = add_combo(content,
                            box_name=df_entry.get())
 
