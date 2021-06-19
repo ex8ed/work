@@ -115,7 +115,8 @@ def one_attr_search(rt, content):
                             values=["workers",
                                     "children",
                                     "otdeli"])
-    attr_entry = add_combo(content)
+    attr_entry = add_combo(content,
+                           box_name=df_entry.get())
 
     button = tk.Button(content,
                        text='Вывести',
