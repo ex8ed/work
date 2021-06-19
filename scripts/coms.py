@@ -1,3 +1,10 @@
+"""
+Набор функций, позволяющих получить DataFrame-объекты
+для составления графических и текстовых отчетов.
+Содержит набор функций проверки формата.
+
+"""
+
 import time
 import re
 import pandas as pd
@@ -27,7 +34,8 @@ def data(string):
 def phone_num(string):
     phone = re.sub(r'\b\D', '', string)
     clear_phone = re.sub(r'[\ \(]?', '', phone)
-    if re.findall(r'^[\+7|8]*?\d{10}$', clear_phone) or re.match(r'^\w+[\.]?(\w+)*\@(\w+\.)*\w{2,}$', string):
+    if re.findall(r'^[\+7|8]*?\d{10}$', clear_phone) or\
+            re.match(r'^\w+[\.]?(\w+)*\@(\w+\.)*\w{2,}$', string):
         return string
     return False
 
@@ -68,21 +76,9 @@ def deleting():
     pass
 
 
-# -*- coding: utf-8 -*-
-
-"""
-Набор функций, позволяющих получить DataFrame-объекты
-для составления графических и текстовых отчетов.
-Содержит набор функций проверки формата.
-
-@author: Nick
-"""
-
-
 def back_attr(name):
     global db
     """
-    @author: Nick
         Функция возвращает поле по имени заданного атрибута
     :param R: База данных
     :param name: Имя запрашиваемого атрибута
@@ -94,7 +90,6 @@ def back_attr(name):
 def back_named_col(names):
     global db
     """
-    @author: Nick
         Функция возвращает множество полей, по заданным атрибутам,
     если таковые имеются. (Предусмотрена проверка наличия набора)
     :param R: База данных
@@ -109,7 +104,6 @@ def back_names_cond(names,
                     condition):
     global db
     """
-    @author: Nick
         Функция возвращает поля атрибутов names если параметр
         by_name удовлетворяет condition.
     :param R: база данных
@@ -129,7 +123,6 @@ def back_many_cond(names,
                    conditions: tuple):
     global db
     """
-    @author: Nick
         Функция возвращает поля атрибутов names если параметры:
     by_name[i] удовлетворяет condition[i] (len = 2)
     :param conditions: Набор условий
@@ -146,7 +139,6 @@ def back_many_cond(names,
 
 def correct_number(number):
     """
-    @author: Nick
         Функция проверяет корректность
         введенного в справочник номера телефона
     :param number: данный номер телефона
@@ -166,7 +158,6 @@ def correct_number(number):
 
 def correct_data(data_str):
     """
-    @author: Nick
         Функция проверяет корректность
         введенной в справочник даты.
     :param data_str: строка, содержащая дату
