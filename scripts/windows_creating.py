@@ -8,7 +8,7 @@ Created on Thu Jun 17 20:48:12 2021
 import tkinter as tk
 import numpy as np
 from tkinter import ttk
-from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, back_attr,back_named_col,  back_names_cond, back_many_cond, back_columns, back_value_columns
+from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, back_attr,back_named_col,  back_names_cond, back_many_cond, back_columns, back_value_columns, make_plot
 
 def add_workers_row(rt, content):
     """
@@ -367,8 +367,6 @@ def back_graph_rep(rt, content):
         print(graph_type == 'Гистограмма')
         if graph_type == 'Гистограмма':
             reports = ['1', '2', '3']
-        elif graph_type == 'Диаграмма Бокса-Уискера':
-            reports = ['1', '2']
         elif graph_type == 'Диаграмма рассеивания':
             reports = ['1']
         elif graph_type == 'Столбчатая диаграмма':
@@ -384,10 +382,10 @@ def back_graph_rep(rt, content):
     graph_label = tk.Label(content, text='Выберите тип графика', width=50)
     rep_label = tk.Label(content, text='Выберите графический отчет', width=50)
     dict_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], width=50)
-    graph_combobox = ttk.Combobox(content, values=['Гистограмма', 'Диаграмма Бокса-Уискера', 'Диаграмма рассеивания', 'Столбчатая диаграмма'], width=50)
+    graph_combobox = ttk.Combobox(content, values=['Гистограмма', 'Диаграмма рассеивания', 'Столбчатая диаграмма'], width=50)
     button_1 = tk.Button(content, text='Подтвердить', command=on_click)
     rep_combobox = ttk.Combobox(content, values=reports, width=50)
-    button_2 = tk.Button(content, text='Вывести')
+    button_2 = tk.Button(content, text='Вывести', command=lambda: make_plot(dict_combobox.get(), graph_combobox.get(), rep_combobox.get()))
     
     content.grid(column=0, row=0)
     dict_label.grid(column=0, row=0)
