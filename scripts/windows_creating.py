@@ -8,7 +8,9 @@ Created on Thu Jun 17 20:48:12 2021
 import tkinter as tk
 import numpy as np
 from tkinter import ttk
-from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, back_attr,back_named_col,  back_names_cond, back_many_cond, back_columns, back_value_columns
+from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
+    back_attr,back_named_col, back_names_cond, back_many_cond, back_columns, back_value_columns, \
+    get_workers, get_children, get_deps, make_plot
 
 def add_workers_row(rt, content):
     """
@@ -133,7 +135,7 @@ def one_attr_search(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
 
-    t = tk.Text(content, width=100, height=30)
+    t = tk.Text(content, width=120, height=30, wrap=tk.NONE)
     ys = ttk.Scrollbar(content, orient = 'vertical', command = t.yview)
     xs = ttk.Scrollbar(content, orient = 'horizontal', command = t.xview)
     t['yscrollcommand'] = ys.set
@@ -145,16 +147,14 @@ def one_attr_search(rt, content):
     label = tk.Label(content, text='Вывод текстового отчета по одному атрибуту')
     df_label = tk.Label(content, text='Справочник')
     attr_label = tk.Label(content, text='Атрибут')
-
-    df_entry = ttk.Entry(content, textvariable=df, width=45)
-    attr_entry = ttk.Entry(content, textvariable=attr, width=45)
-
+    df_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], textvariable=df, width=50)
+    attr_entry = ttk.Entry(content, textvariable=attr, width=50)
     button = tk.Button(content, text='Вывести', command=lambda: create_otchet_window(rt, t, back_attr(attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
     df_label.grid(column=0, row=1)
-    df_entry.grid(column=1, row=1)
+    df_combobox.grid(column=1, row=1)
     attr_label.grid(column=0, row=2)
     attr_entry.grid(column=1, row=2)
     button.grid(column=0, row=3)
@@ -172,7 +172,7 @@ def many_attr_search(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
 
-    t = tk.Text(content, width=100, height=30)
+    t = tk.Text(content, width=120, height=30, wrap=tk.NONE)
     ys = ttk.Scrollbar(content, orient = 'vertical', command = t.yview)
     xs = ttk.Scrollbar(content, orient = 'horizontal', command = t.xview)
     t['yscrollcommand'] = ys.set
@@ -211,7 +211,7 @@ def one_attr_search_filter(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
 
-    t = tk.Text(content, width=100, height=30)
+    t = tk.Text(content, width=120, height=30, wrap=tk.NONE)
     ys = ttk.Scrollbar(content, orient = 'vertical', command = t.yview)
     xs = ttk.Scrollbar(content, orient = 'horizontal', command = t.xview)
     t['yscrollcommand'] = ys.set
@@ -260,7 +260,7 @@ def many_attr_search_filter(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
 
-    t = tk.Text(content, width=100, height=30)
+    t = tk.Text(content, width=120, height=30, wrap=tk.NONE)
     ys = ttk.Scrollbar(content, orient = 'vertical', command = t.yview)
     xs = ttk.Scrollbar(content, orient = 'horizontal', command = t.xview)
     t['yscrollcommand'] = ys.set
@@ -314,21 +314,6 @@ def back_hist_rep(rt, content):
     name_attr_combobox.grid(column=4, row=0)
     button.grid(column=4, row=2)
     
-def back_boxplot_rep(rt, content):
-    for widget in content.winfo_children():
-        widget.destroy()
-        
-    label = tk.Label(content, text='Выберите два атрибута для построения диаграммы Бокса-Уискера', width=50)
-    name_attr_combobox = ttk.Combobox(content, values=back_columns(), width=50)
-    value_attr_combobox = ttk.Combobox(content, values=back_value_columns(), width=50)
-    button = tk.Button(content, text='Вывести')
-    
-    content.grid(column=0, row=0)
-    label.grid(column=0, row=0, columnspan=3)
-    name_attr_combobox.grid(column=4, row=0)
-    value_attr_combobox.grid(column=4, row=1)
-    button.grid(column=4, row=2)
-    
 def back_spread_rep(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
@@ -363,16 +348,25 @@ def back_columns_rep(rt, content):
 def back_graph_rep(rt, content):
     def on_click():
         global reports
+        dict_type = dict_combobox.get()
         graph_type = graph_combobox.get()
-        print(graph_type == 'Гистограмма')
-        if graph_type == 'Гистограмма':
-            reports = ['1', '2', '3']
-        elif graph_type == 'Диаграмма Бокса-Уискера':
-            reports = ['1', '2']
-        elif graph_type == 'Диаграмма рассеивания':
-            reports = ['1']
-        elif graph_type == 'Столбчатая диаграмма':
-            reports = ['1', '2', '3', '4']
+        if dict_type == 'Работники':
+            if graph_type == 'Гистограмма':
+                reports = ['Гистограмма распределения рабочих по годам рождения', \
+                           'Гистограмма распределения зарплат рабочих']
+            elif graph_type == 'Диаграмма рассеивания':
+                reports = ['Рассеянная диаграмма зарплат работников по возрасту']
+            elif graph_type == 'Столбчатая диаграмма':
+                reports = ['Столбчатая диаграмма средней зп по отделам', \
+                           'Столбчатая диаграмма вакцинированных и невакцинированных от COVID-19']
+        elif dict_type == 'Дети работников':
+            if graph_type == 'Гистограмма':
+                reports = ['Гистограмма распределения детей по годам рождения']
+            elif graph_type == 'Столбчатая диаграмма':
+                reports = ['Столбчатая диаграмма распределения детей по садикам']
+        elif dict_type == 'Отделы':
+            if graph_type == 'Столбчатая диаграмма':
+                reports = ['Столбчатая диаграмма распределения сотрудников по отделам']
         rep_combobox.configure(values=reports)
         
     for widget in content.winfo_children():
@@ -384,10 +378,10 @@ def back_graph_rep(rt, content):
     graph_label = tk.Label(content, text='Выберите тип графика', width=50)
     rep_label = tk.Label(content, text='Выберите графический отчет', width=50)
     dict_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], width=50)
-    graph_combobox = ttk.Combobox(content, values=['Гистограмма', 'Диаграмма Бокса-Уискера', 'Диаграмма рассеивания', 'Столбчатая диаграмма'], width=50)
+    graph_combobox = ttk.Combobox(content, values=['Гистограмма', 'Диаграмма рассеивания', 'Столбчатая диаграмма'], width=50)
     button_1 = tk.Button(content, text='Подтвердить', command=on_click)
     rep_combobox = ttk.Combobox(content, values=reports, width=50)
-    button_2 = tk.Button(content, text='Вывести')
+    button_2 = tk.Button(content, text='Вывести', command=lambda: make_plot(dict_combobox.get(), graph_combobox.get(), rep_combobox.get()))
     
     content.grid(column=0, row=0)
     dict_label.grid(column=0, row=0)
@@ -399,6 +393,59 @@ def back_graph_rep(rt, content):
     rep_combobox.grid(column=1, row=3)
     button_2.grid(column=1, row=4)
     
+def show_dict_workers(rt, content):
+    for widget in content.winfo_children():
+        widget.destroy()
+    
+    label = tk.Label(content, text='Нормализованный словарь рабочих', width=50)
+    text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
+    ys = ttk.Scrollbar(content, orient = 'vertical', command = text.yview)
+    xs = ttk.Scrollbar(content, orient = 'horizontal', command = text.xview)
+    text['yscrollcommand'] = ys.set
+    text['xscrollcommand'] = xs.set
+    
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0)
+    xs.grid(column=0, row=2, sticky='we')
+    ys.grid(column=1, row=1, sticky='ns')
+    text.grid(column=0, row=1, sticky='nwes')
+    text.insert(1.0, get_workers())
+    
+def show_dict_children(rt, content):
+    for widget in content.winfo_children():
+        widget.destroy()
+    
+    label = tk.Label(content, text='Нормализованный словарь детей рабочих', width=50)
+    text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
+    ys = ttk.Scrollbar(content, orient = 'vertical', command = text.yview)
+    xs = ttk.Scrollbar(content, orient = 'horizontal', command = text.xview)
+    text['yscrollcommand'] = ys.set
+    text['xscrollcommand'] = xs.set
+    
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0)
+    xs.grid(column=0, row=2, sticky='we')
+    ys.grid(column=1, row=1, sticky='ns')
+    text.grid(column=0, row=1, sticky='nwes')
+    text.insert(1.0, get_children())
+    
+def show_dict_deps(rt, content):
+    for widget in content.winfo_children():
+        widget.destroy()
+    
+    label = tk.Label(content, text='Нормализованный словарь отделов', width=50)
+    text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
+    ys = ttk.Scrollbar(content, orient = 'vertical', command = text.yview)
+    xs = ttk.Scrollbar(content, orient = 'horizontal', command = text.xview)
+    text['yscrollcommand'] = ys.set
+    text['xscrollcommand'] = xs.set
+    
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0)
+    xs.grid(column=0, row=2, sticky='we')
+    ys.grid(column=1, row=1, sticky='ns')
+    text.grid(column=0, row=1, sticky='nwes')
+    text.insert(1.0, get_deps())
     
 def create_otchet_window(root, text, df):
     """
@@ -410,20 +457,20 @@ def create_otchet_window(root, text, df):
         width = df.shape[1]
     except:
         width = 1
-    # Массив указателей на виджеты Entry
-    pnt = np.empty(shape=(height, width), dtype="O")
-    # Массив указателей на текстовые буферы для передачи данных
-    vrs = np.empty(shape=(height, width), dtype="O")
+    # # Массив указателей на виджеты Entry
+    # pnt = np.empty(shape=(height, width), dtype="O")
+    # # Массив указателей на текстовые буферы для передачи данных
+    # vrs = np.empty(shape=(height, width), dtype="O")
 
-    # До любык обращений к tkinter, посокльку запускает интерпретатор
+    # # До любык обращений к tkinter, посокльку запускает интерпретатор
 
-    # Инициализация указателей на буферы
+    # # Инициализация указателей на буферы
     # for i in range(height):
     #     for j in range(width):
     #         vrs[i, j] = tk.StringVar()
             
-    # Построение таблицы
-    # Структура окна
+    # # Построение таблицы
+    # # Структура окна
     # top = tk.LabelFrame(frame, text="Справочник")
     # top.grid(column=0, row=0)
     # # Заполнение значений
@@ -432,7 +479,7 @@ def create_otchet_window(root, text, df):
     #         pnt[i, j] = tk.Entry(top, textvariable=vrs[i, j])
     #         pnt[i, j].grid(row=i, column=j)
     
-    # Заполнение таблицы значениями
+    # # Заполнение таблицы значениями
     # for i in range(height):
     #     for j in range(width):
     #         try:
