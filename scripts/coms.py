@@ -75,12 +75,12 @@ def load():
     dlg = fld.Open(filetypes=ftypes)
     fl = dlg.show()
     if len(fl) != 0:
-        os.chdir(os.getcwd())
+
         db = pd.read_pickle('./data/db.pic')
         workers = pd.read_pickle('./data/workers.pic')
         children = pd.read_pickle('./data/children.pic')
         otdeli = pd.read_pickle('./data/otdeli.pic')
-        tk.Tk().messagebox.showinfo('Файл', 'Файл открыт успешно')
+        tk.messagebox.showinfo('Файл', 'Файл открыт успешно')
     pass
 
 
