@@ -490,3 +490,4 @@ def create_otchet_window(root, text, df):
     
     text.delete(1.0, tk.END)
     text.insert(1.0, df.to_string())
+

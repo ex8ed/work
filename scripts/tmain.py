@@ -67,3 +67,4 @@ mainmenu.add_cascade(label='Помощь', menu=help_menu)
 rt.config(menu=mainmenu)
 
 rt.mainloop()
+
