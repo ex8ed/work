@@ -57,13 +57,9 @@ def load():
     dlg = fld.Open(filetypes=ftypes)
     fl = dlg.show()
     if len(fl) != 0:
-        workers = pd.read_pickle('C:/Users/Дмитрий/Documents/GitHub/work/data/workers.pic')
-        children = pd.read_pickle('C:/Users/Дмитрий/Documents/GitHub/work/data/children.pic')
-        otdeli = pd.read_pickle('C:/Users/Дмитрий/Documents/GitHub/work/data/otdeli.pic')
-        db = pd.read_pickle('C:/Users/Дмитрий/Documents/GitHub/work/data/db.pic')
-        # workers = pd.read_pickle('d:/work.project/work/data/workers.pic')
-        # children = pd.read_pickle('d:/work.project/work/data/children.pic')
-        # otdeli = pd.read_pickle('d:/work.project/work/data/otdeli.pic')
+        workers = pd.read_pickle('d:/work.project/work/data/workers.pic')
+        children = pd.read_pickle('d:/work.project/work/data/children.pic')
+        otdeli = pd.read_pickle('d:/work.project/work/data/otdeli.pic')
         tk.messagebox.showinfo('Файл', 'Файл открыт успешно')
     return 0
 
