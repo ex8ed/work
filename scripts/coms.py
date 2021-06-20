@@ -13,6 +13,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from tkinter import filedialog as fld
 
+
 def chars(string):
     if ''.join(string.split()).isalpha():
         return string
@@ -52,18 +53,24 @@ def load():
     global children
     global otdeli
     global workers
-    global db
     ftypes = [('Pickle файлы', '*.pic'), ('Все файлы', '*')]
     dlg = fld.Open(filetypes=ftypes)
     fl = dlg.show()
     if len(fl) != 0:
-        workers = pd.read_pickle('C:/Users/Дмитрий/Documents/GitHub/work/data/workers.pic')
-        children = pd.read_pickle('C:/Users/Дмитрий/Documents/GitHub/work/data/children.pic')
-        otdeli = pd.read_pickle('C:/Users/Дмитрий/Documents/GitHub/work/data/otdeli.pic')
-        db = pd.read_pickle('C:/Users/Дмитрий/Documents/GitHub/work/data/db.pic')
+        workers = pd.read_pickle('d:/work.project/work/data/workers.pic')
+        children = pd.read_pickle('d:/work.project/work/data/children.pic')
+        otdeli = pd.read_pickle('d:/work.project/work/data/otdeli.pic')
         tk.messagebox.showinfo('Файл', 'Файл открыт успешно')
     return 0
 
+def get_workers():
+    return workers.to_string()
+
+def get_children():
+    return children.to_string()
+
+def get_deps():
+    return otdeli.to_string()
 
 def end(root):
     root.destroy()
@@ -81,12 +88,12 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     :param pay: Заработная плата
     :return:
     """
-    global db
+    global db_w
     if False in [chars(fio), data(birth), chars(child), chars(vac), numerical(dep),
                  numerical(pay)]:
         return False
     else:
-        db.loc[db.index.max() + 1] = [fio, birth, child, vac, dep, prof, pay]
+        db_w.loc[db.index.max() + 1] = [fio, birth, child, vac, dep, prof, pay]
         return False
 
 
@@ -98,11 +105,11 @@ def adding_to_children(fio, birth_ch, k_gard):
     :param k_gard: Номер садика
     :return:
     """
-    global db
+    global db_c
     if False in [chars(fio), data(birth_ch), numerical(k_gard)]:
         return False
     else:
-        db.loc[db.index.max() + 1] = [fio, birth_ch, k_gard]
+        db_c.loc[db_c.index.max() + 1] = [fio, birth_ch, k_gard]
  
         
 def adding_to_otdeli(num, date, tel, num_workers):
@@ -113,11 +120,11 @@ def adding_to_otdeli(num, date, tel, num_workers):
     :param k_gard: Номер садика
     :return:
     """
-    global db
+    global db_o
     if False in [numerical(num), correct_data(date), correct_number(tel), numerical(num_workers)]:
         return False
     else:
-        db.loc[db.index.max() + 1] = [num, date, tel, num_workers]
+        db_o.loc[db_o.index.max() + 1] = [num, date, tel, num_workers]
 
 
 def deleting(index):
@@ -294,7 +301,7 @@ def bar_sadik():
     plt.yticks([3, 6, 9, 12, 15, 18, 21])
     plt.title('Распределение детей по садикам')
     plt.show()
-    
+
 def bar_otdel_salary():
     """
     Столбчатая диаграмма средней зп по отделам
@@ -315,7 +322,7 @@ def bar_otdeli():
     plt.title('Распределение сотрудников по отделам')
     plt.xticks([1, 2, 3])
     plt.show()
-    
+
 def hist_salary():
     """
     Гистограмма распределения зарплат рабочих
@@ -344,19 +351,16 @@ def hist_birth_children():
     plt.show()
 
 def make_plot(dictionary, graph_type, num):
-    global workers
-    print('gffhdfgdfgdfgdfgdfgdfgdfg')
-    print(workers, 1)
     if dictionary == 'Работники':
         if graph_type == 'Гистограмма':
-            if num == '1':
+            if num == 'Гистограмма распределения рабочих по годам рождения':
                 hist_birth_workers()
-            elif num == '2':
+            elif num == 'Гистограмма распределения зарплат рабочих':
                 hist_salary()
         elif graph_type == 'Столбчатая диаграмма':
-            if num == '1':
+            if num == 'Столбчатая диаграмма средней зп по отделам':
                 bar_otdel_salary()
-            elif num == '2':
+            elif num == 'Столбчатая диаграмма вакцинированных и невакцинированных от COVID-19':
                 bar_covid()
         else:
             scatter()
@@ -368,3 +372,4 @@ def make_plot(dictionary, graph_type, num):
     else:
         if graph_type == 'Столбчатая диаграмма':
             bar_otdeli()
+
