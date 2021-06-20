@@ -1,46 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Набор функций для генерации окон приложения.
+Скрипт, содержащий функции для создания окон и работы с ними
 """
-
 import tkinter as tk
-import numpy as np
 from tkinter import ttk
-from coms import adding_to_workers, deleting, back_attr, back_named_col, back_names_cond, back_many_cond
+from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
+    back_attr, back_named_col, back_names_cond, back_many_cond, \
+    get_workers, get_children, get_deps, make_plot
 
 
-def add_combo(content,
-              box_name="workers"):
-    """
-    Создает combobox для нужного справочника
-    :param content: Объект TK
-    :param box_name: имя справочника
-    """
-    if box_name == "workers":
-        return ttk.Combobox(content,
-                            values=["ФИО",
-                                    "Дата рождения",
-                                    "ФИО Ребенка",
-                                    "Прививка от COVID-19",
-                                    "Номер отдела",
-                                    "Должность",
-                                    "З/П в месяц"])
-    elif box_name == "children":
-        return ttk.Combobox(content,
-                            values=["ФИО Ребенка",
-                                    "Дата рождения ребенка",
-                                    "Номер садика"])
-    elif box_name == "otdeli":
-        return ttk.Combobox(content,
-                            values=["Дата создания",
-                                    "Телефон",
-                                    "Количество сотрудников"])
-    else:
-        return ttk.Combobox(content,
-                            values=[" "])
-
-
-def add_row(content):
+def add_workers_row(rt, content):
     """
     Создание окна для добавления записи в исходную базу данных
     """
@@ -62,15 +31,14 @@ def add_row(content):
     dep_entry = ttk.Entry(content, width=40)
     prof_entry = ttk.Entry(content, width=40)
     pay_entry = ttk.Entry(content, width=40)
-    add = tk.Button(content, text='Добавить запись', width=20, command=lambda: adding_to_workers(fio_entry.get(),
-                                                                                                 birth_entry.get(),
-                                                                                                 child_entry.get(),
-                                                                                                 vac_entry.get(),
-                                                                                                 dep_entry.get(),
-                                                                                                 prof_entry.get(),
-                                                                                                 pay_entry.get()))
+    attr_list = [fio_entry.get(), birth_entry.get(), child_entry.get(),
+                 vac_entry.get(), dep_entry.get(), prof_entry.get(), pay_entry.get()]
+    add = tk.Button(content, text='Добавить запись', width=20,
+                    command=lambda: adding_to_workers(attr_list))
     update = tk.Button(content, text='Обновить запись', width=20)
-    delete = tk.Button(content, text='Удалить запись', width=20, command=deleting)
+    df = get_workers()
+    delete = tk.Button(content, text='Удалить запись', width=20,
+                       command=lambda: deleting(df.loc[df.isin(attr_list).any(axis=1)].index.tolist()))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -93,6 +61,80 @@ def add_row(content):
     delete.grid(column=3, row=11, columnspan=2)
 
 
+def add_children_row(rt, content):
+    """
+    Создание окна для добавления записи в исходную базу данных
+    """
+    for widget in content.winfo_children():
+        widget.destroy()
+
+    label = tk.Label(content, text='Добавление, редактирование и удаление записей')
+    fio_label = tk.Label(content, text='ФИО ребенка')
+    birth_label = tk.Label(content, text='Дата рождения')
+    garden_label = tk.Label(content, text='Номер садика')
+    fio_entry = ttk.Entry(content, width=40)
+    birth_entry = ttk.Entry(content, width=40)
+    garden_entry = ttk.Entry(content, width=40)
+    attr_list = [fio_entry.get(), birth_entry.get(), garden_entry.get()]
+    add = tk.Button(content, text='Добавить запись', width=20,
+                    command=lambda: adding_to_children(fio_entry.get(),
+                                                       birth_entry.get(),
+                                                       garden_entry.get()))
+    update = tk.Button(content, text='Обновить запись', width=20)
+    df = get_children()
+    delete = tk.Button(content, text='Удалить запись', width=20,
+                       command=lambda: deleting(df.loc[df.isin(attr_list).any(axis=1)].index.tolist()))
+
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0, columnspan=3)
+    fio_label.grid(column=0, row=1)
+    birth_label.grid(column=0, row=2)
+    garden_label.grid(column=0, row=3)
+    fio_entry.grid(column=3, row=1, columnspan=2)
+    birth_entry.grid(column=3, row=2, columnspan=2)
+    garden_entry.grid(column=3, row=3, columnspan=2)
+    add.grid(column=3, row=9, columnspan=2)
+    update.grid(column=3, row=10, columnspan=2)
+    delete.grid(column=3, row=11, columnspan=2)
+
+
+def add_otdeli_row(rt, content):
+    """
+    Создание окна для добавления записи в исходную базу данных
+    """
+    for widget in content.winfo_children():
+        widget.destroy()
+
+    label = tk.Label(content, text='Добавление, редактирование и удаление записей')
+    num_label = tk.Label(content, text='Номер отдела')
+    date_label = tk.Label(content, text='Дата создания')
+    tel_label = tk.Label(content, text='Телефон')
+    num_workers_label = tk.Label(content, text='Количество сотрудников')
+    num_entry = ttk.Entry(content, width=40)
+    date_entry = ttk.Entry(content, width=40)
+    tel_entry = ttk.Entry(content, width=40)
+    num_workers_entry = ttk.Entry(content, width=40)
+    add = tk.Button(content, text='Добавить запись', width=20,
+                    command=lambda: adding_to_otdeli(num_entry.get(), date_entry.get(),
+                                                     tel_entry.get(), num_workers_entry.get()))
+    update = tk.Button(content, text='Обновить запись', width=20)
+    delete = tk.Button(content, text='Удалить запись', width=20, command=deleting)
+
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0, columnspan=3)
+    num_label.grid(column=0, row=1)
+    date_label.grid(column=0, row=2)
+    tel_label.grid(column=0, row=3)
+    num_workers_label.grid(column=0, row=4)
+    num_entry.grid(column=3, row=1, columnspan=2)
+    date_entry.grid(column=3, row=2, columnspan=2)
+    tel_entry.grid(column=3, row=3, columnspan=2)
+    num_workers_entry.grid(column=3, row=4, columnspan=2)
+    add.grid(column=3, row=9, columnspan=2)
+    update.grid(column=3, row=10, columnspan=2)
+    delete.grid(column=3, row=11, columnspan=2)
+
+
 def one_attr_search(rt, content):
     """
     Создание окна для поиска по одному атрибуту
@@ -101,37 +143,27 @@ def one_attr_search(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
 
-    t = tk.Text(content, width=70, height=30)
+    t = tk.Text(content, width=120, height=30, wrap=tk.NONE)
     ys = ttk.Scrollbar(content, orient='vertical', command=t.yview)
     xs = ttk.Scrollbar(content, orient='horizontal', command=t.xview)
     t['yscrollcommand'] = ys.set
     t['xscrollcommand'] = xs.set
-    t.insert(1.0, 'Здесь будет выводится текст отчета')
 
-    df = tk.StringVar()
     attr = tk.StringVar()
 
     label = tk.Label(content, text='Вывод текстового отчета по одному атрибуту')
     df_label = tk.Label(content, text='Справочник')
     attr_label = tk.Label(content, text='Атрибут')
-
-    # добавлены ComboBox
-    df_entry = ttk.Combobox(content,
-                            values=["workers",
-                                    "children",
-                                    "otdeli"])
-
-    attr_entry = add_combo(content,
-                           box_name=df_entry.get())
-
-    button = tk.Button(content,
-                       text='Вывести',
-                       command=lambda: create_otchet_window(rt, back_attr(attr_entry.get())))
+    df_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], width=50)
+    attr_entry = ttk.Entry(content, textvariable=attr, width=50)
+    button = tk.Button(content, text='Вывести',
+                       command=lambda: create_otchet_window(rt, t, back_attr(df_combobox.get(),
+                                                                             attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
     df_label.grid(column=0, row=1)
-    df_entry.grid(column=1, row=1)
+    df_combobox.grid(column=1, row=1)
     attr_label.grid(column=0, row=2)
     attr_entry.grid(column=1, row=2)
     button.grid(column=0, row=3)
@@ -150,30 +182,29 @@ def many_attr_search(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
 
-    t = tk.Text(content, width=70, height=30)
+    t = tk.Text(content, width=120, height=30, wrap=tk.NONE)
     ys = ttk.Scrollbar(content, orient='vertical', command=t.yview)
     xs = ttk.Scrollbar(content, orient='horizontal', command=t.xview)
     t['yscrollcommand'] = ys.set
     t['xscrollcommand'] = xs.set
-    t.insert(1.0, 'Здесь будет выводится текст отчета')
 
-    df = tk.StringVar()
     attr = tk.StringVar()
 
     label = tk.Label(content, text='Вывод текстового отчета по нескольким атрибутам')
     df_label = tk.Label(content, text='Справочник')
     attr_label = tk.Label(content, text='Атрибуты писать через запятую')
 
-    df_entry = ttk.Entry(content, textvariable=df, width=45)
+    df_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], width=50)
     attr_entry = ttk.Entry(content, textvariable=attr, width=45)
 
     button = tk.Button(content, text='Вывести',
-                       command=lambda: create_otchet_window(rt, back_named_col(attr_entry.get())))
+                       command=lambda: create_otchet_window(rt, t, back_named_col(df_combobox.get(),
+                                                                                  attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
     df_label.grid(column=0, row=1)
-    df_entry.grid(column=1, row=1)
+    df_combobox.grid(column=1, row=1)
     attr_label.grid(column=0, row=2)
     attr_entry.grid(column=1, row=2)
     button.grid(column=0, row=3)
@@ -192,38 +223,37 @@ def one_attr_search_filter(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
 
-    t = tk.Text(content, width=70, height=30)
+    t = tk.Text(content, width=120, height=30, wrap=tk.NONE)
     ys = ttk.Scrollbar(content, orient='vertical', command=t.yview)
     xs = ttk.Scrollbar(content, orient='horizontal', command=t.xview)
     t['yscrollcommand'] = ys.set
     t['xscrollcommand'] = xs.set
-    t.insert(1.0, 'Здесь будет выводится текст отчета')
 
-    df = tk.StringVar()
     attr = tk.StringVar()
     filt = tk.StringVar()
     val = tk.StringVar()
 
     label = tk.Label(content, text='Вывод текстового отчета по нескольким атрибутам')
     df_label = tk.Label(content, text='Справочник')
-    attr_label = tk.Label(content, text='Атрибуты (писать через запятую)')
+    attr_label = tk.Label(content, text='Атрибут')
     filt_label = tk.Label(content, text='Атрибут, по которому будет отбор')
     val_label = tk.Label(content, text='Условие')
 
-    df_entry = ttk.Entry(content, textvariable=df, width=45)
+    df_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], width=50)
     attr_entry = ttk.Entry(content, textvariable=attr, width=45)
     filt_entry = ttk.Entry(content, textvariable=filt, width=45)
     val_entry = ttk.Entry(content, textvariable=val, width=45)
 
-    button = tk.Button(content, text='Вывести', command=lambda: create_otchet_window(rt,
-                                                                                     back_names_cond(attr_entry.get(),
-                                                                                                     filt_entry.get(),
-                                                                                                     val_entry.get())))
+    button = tk.Button(content, text='Вывести',
+                       command=lambda: create_otchet_window(rt, t, back_names_cond(df_combobox.get(),
+                                                                                   attr_entry.get(),
+                                                                                   filt_entry.get(),
+                                                                                   val_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
     df_label.grid(column=0, row=1)
-    df_entry.grid(column=1, row=1)
+    df_combobox.grid(column=1, row=1)
     attr_label.grid(column=0, row=2)
     attr_entry.grid(column=1, row=2)
     filt_label.grid(column=0, row=3)
@@ -246,14 +276,12 @@ def many_attr_search_filter(rt, content):
     for widget in content.winfo_children():
         widget.destroy()
 
-    t = tk.Text(content, width=70, height=30)
+    t = tk.Text(content, width=120, height=30, wrap=tk.NONE)
     ys = ttk.Scrollbar(content, orient='vertical', command=t.yview)
     xs = ttk.Scrollbar(content, orient='horizontal', command=t.xview)
     t['yscrollcommand'] = ys.set
     t['xscrollcommand'] = xs.set
-    t.insert(1.0, 'Здесь будет выводится текст отчета')
 
-    df = tk.StringVar()
     attr = tk.StringVar()
     filt = tk.StringVar()
     val = tk.StringVar()
@@ -264,19 +292,20 @@ def many_attr_search_filter(rt, content):
     filt_label = tk.Label(content, text='Атрибуты, по которым будет отбор')
     val_label = tk.Label(content, text='Условия')
 
-    df_entry = ttk.Entry(content, textvariable=df, width=45)
+    df_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], width=50)
     attr_entry = ttk.Entry(content, textvariable=attr, width=45)
     filt_entry = ttk.Entry(content, textvariable=filt, width=45)
     val_entry = ttk.Entry(content, textvariable=val, width=45)
 
-    button = tk.Button(content, text='Вывести', command=lambda: create_otchet_window(rt,
-                                                                                     back_many_cond(attr_entry.get(),
-                                                                                                    filt_entry.get(),
-                                                                                                    val_entry.get())))
+    button = tk.Button(content, text='Вывести',
+                       command=lambda: create_otchet_window(rt, t, back_many_cond(df_combobox.get(),
+                                                                                  attr_entry.get(),
+                                                                                  filt_entry.get(),
+                                                                                  val_entry.get())))
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
     df_label.grid(column=0, row=1)
-    df_entry.grid(column=1, row=1)
+    df_combobox.grid(column=1, row=1)
     attr_label.grid(column=0, row=2)
     attr_entry.grid(column=1, row=2)
     filt_label.grid(column=0, row=3)
@@ -291,42 +320,147 @@ def many_attr_search_filter(rt, content):
     content.grid_rowconfigure(0, weight=1)
 
 
-def create_otchet_window(root, df):
+def back_graph_rep(rt, content):
     """
-    ATTENTION Это код полякова не ебу че тут творится
+    Функция для составления графических отчетов
+    :param rt:
+    :param content:
+    :return:
+    """
+    def on_click():
+        """
+        Подфункция для считывания значения combobox
+        :return:
+        """
+        global reports
+        dict_type = dict_combobox.get()
+        graph_type = graph_combobox.get()
+        if dict_type == 'Работники':
+            if graph_type == 'Гистограмма':
+                reports = ['Гистограмма распределения рабочих по годам рождения',
+                           'Гистограмма распределения зарплат рабочих']
+            elif graph_type == 'Диаграмма рассеивания':
+                reports = ['Рассеянная диаграмма зарплат работников по возрасту']
+            elif graph_type == 'Столбчатая диаграмма':
+                reports = ['Столбчатая диаграмма средней зп по отделам',
+                           'Столбчатая диаграмма вакцинированных и невакцинированных от COVID-19']
+        elif dict_type == 'Дети работников':
+            if graph_type == 'Гистограмма':
+                reports = ['Гистограмма распределения детей по годам рождения']
+            elif graph_type == 'Столбчатая диаграмма':
+                reports = ['Столбчатая диаграмма распределения детей по садикам']
+        elif dict_type == 'Отделы':
+            if graph_type == 'Столбчатая диаграмма':
+                reports = ['Столбчатая диаграмма распределения сотрудников по отделам']
+        rep_combobox.configure(values=reports)
+
+    for widget in content.winfo_children():
+        widget.destroy()
+
+    reports = []
+
+    dict_label = tk.Label(content, text='Выберите словарь', width=50)
+    graph_label = tk.Label(content, text='Выберите тип графика', width=50)
+    rep_label = tk.Label(content, text='Выберите графический отчет', width=50)
+    dict_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников',
+                                                  'Отделы'], width=50)
+    graph_combobox = ttk.Combobox(content, values=['Гистограмма', 'Диаграмма рассеивания',
+                                                   'Столбчатая диаграмма'], width=50)
+    button_1 = tk.Button(content, text='Подтвердить', command=on_click)
+    rep_combobox = ttk.Combobox(content, values=reports, width=50)
+    button_2 = tk.Button(content, text='Вывести',
+                         command=lambda: make_plot(dict_combobox.get(), graph_combobox.get(),
+                                                   rep_combobox.get()))
+
+    content.grid(column=0, row=0)
+    dict_label.grid(column=0, row=0)
+    dict_combobox.grid(column=1, row=0)
+    graph_label.grid(column=0, row=1)
+    graph_combobox.grid(column=1, row=1)
+    button_1.grid(column=1, row=2)
+    rep_label.grid(column=0, row=3)
+    rep_combobox.grid(column=1, row=3)
+    button_2.grid(column=1, row=4)
+
+
+def show_dict_workers(rt, content):
+    """
+    Функция для работы со словарями справочника workers
+    :param rt:
+    :param content:
+    :return:
+    """
+    for widget in content.winfo_children():
+        widget.destroy()
+
+    label = tk.Label(content, text='Нормализованный словарь рабочих', width=50)
+    text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
+    ys = ttk.Scrollbar(content, orient='vertical', command=text.yview)
+    xs = ttk.Scrollbar(content, orient='horizontal', command=text.xview)
+    text['yscrollcommand'] = ys.set
+    text['xscrollcommand'] = xs.set
+
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0)
+    xs.grid(column=0, row=2, sticky='we')
+    ys.grid(column=1, row=1, sticky='ns')
+    text.grid(column=0, row=1, sticky='nwes')
+    text.insert(1.0, get_workers().to_string())
+
+
+def show_dict_children(rt, content):
+    """
+    Функция для работы со словарями справочника children
+    :param rt:
+    :param content:
+    :return:
+    """
+    for widget in content.winfo_children():
+        widget.destroy()
+
+    label = tk.Label(content, text='Нормализованный словарь детей рабочих', width=50)
+    text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
+    ys = ttk.Scrollbar(content, orient='vertical', command=text.yview)
+    xs = ttk.Scrollbar(content, orient='horizontal', command=text.xview)
+    text['yscrollcommand'] = ys.set
+    text['xscrollcommand'] = xs.set
+
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0)
+    xs.grid(column=0, row=2, sticky='we')
+    ys.grid(column=1, row=1, sticky='ns')
+    text.grid(column=0, row=1, sticky='nwes')
+    text.insert(1.0, get_children().to_string())
+
+
+def show_dict_deps(rt, content):
+    """
+    Функция для работы со словарями справочника otdeli
+    :param rt:
+    :param content:
+    :return:
+    """
+    for widget in content.winfo_children():
+        widget.destroy()
+
+    label = tk.Label(content, text='Нормализованный словарь отделов', width=50)
+    text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
+    ys = ttk.Scrollbar(content, orient='vertical', command=text.yview)
+    xs = ttk.Scrollbar(content, orient='horizontal', command=text.xview)
+    text['yscrollcommand'] = ys.set
+    text['xscrollcommand'] = xs.set
+
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0)
+    xs.grid(column=0, row=2, sticky='we')
+    ys.grid(column=1, row=1, sticky='ns')
+    text.grid(column=0, row=1, sticky='nwes')
+    text.insert(1.0, get_deps().to_string())
+
+
+def create_otchet_window(root, text, df):
+    """
     Создание окна текстового отчета
     """
-    height = df.shape[0]
-    try:
-        width = df.shape[1]
-    except:
-        width = 1
-    # Массив указателей на виджеты Entry
-    pnt = np.empty(shape=(height, width), dtype="O")
-    # Массив указателей на текстовые буферы для передачи данных
-    vrs = np.empty(shape=(height, width), dtype="O")
-
-    # До любык обращений к tkinter, посокльку запускает интерпретатор
-    root = tk.Toplevel(root)
-
-    # Инициализация указателей на буферы
-    for i in range(height):
-        for j in range(width):
-            vrs[i, j] = tk.StringVar()
-    # Построение таблицы
-    # Структура окна
-    top = tk.LabelFrame(root, text="Справочник")
-    top.pack(side=tk.TOP)
-    # Заполнение значений
-    for i in range(height):
-        for j in range(width):
-            pnt[i, j] = tk.Entry(top, textvariable=vrs[i, j])
-            pnt[i, j].grid(row=i, column=j)
-    # Заполнение таблицы значениями
-    for i in range(height):
-        for j in range(width):
-            try:
-                cnt = df.iloc[i, j]
-            except:
-                cnt = df.iloc[i]
-            vrs[i, j].set(str(cnt))
+    text.delete(1.0, tk.END)
+    text.insert(1.0, df.to_string())
