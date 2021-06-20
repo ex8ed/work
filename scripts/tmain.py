@@ -14,7 +14,6 @@ from windows_creating import add_workers_row, add_children_row, \
 
 PTH = os.getcwd()
 os.chdir(PTH[:len(PTH) - 8])
-print(PTH[:len(PTH) - 8])
 
 rt = tk.Tk()
 rt.geometry('1000x850')
