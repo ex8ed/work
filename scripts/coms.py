@@ -53,10 +53,12 @@ def load():
     global children
     global otdeli
     global workers
+    global db
     ftypes = [('Pickle файлы', '*.pic'), ('Все файлы', '*')]
     dlg = fld.Open(filetypes=ftypes)
     fl = dlg.show()
     if len(fl) != 0:
+        db = pd.read_pickle('d:/work.project/work/data/workers.pic')
         workers = pd.read_pickle('d:/work.project/work/data/workers.pic')
         children = pd.read_pickle('d:/work.project/work/data/children.pic')
         otdeli = pd.read_pickle('d:/work.project/work/data/otdeli.pic')
@@ -64,16 +66,35 @@ def load():
     return 0
 
 def get_workers():
-    return workers.to_string()
+    return workers
 
 def get_children():
-    return children.to_string()
+    return children
 
 def get_deps():
-    return otdeli.to_string()
+    return otdeli
 
 def end(root):
     root.destroy()
+    
+def return_dict(dict_name):
+    global children
+    global otdeli
+    global workers
+    if dict_name == 'Работники':
+        return workers
+    elif dict_name == 'Дети работников':
+        return children
+    elif dict_name == 'Отделы':
+        return otdeli
+    
+def return_path(dict_name):
+    if dict_name == 'Работники':
+        return 'd:/work.project/work/data/workers.pic'
+    elif dict_name == 'Дети работников':
+        return 'd:/work.project/work/data/children.pic'
+    elif dict_name == 'Отделы':
+        return 'd:/work.project/work/data/otdeli.pic'
 
 
 def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
@@ -88,12 +109,12 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     :param pay: Заработная плата
     :return:
     """
-    global db_w
+    global workers
     if False in [chars(fio), data(birth), chars(child), chars(vac), numerical(dep),
                  numerical(pay)]:
         return False
     else:
-        db_w.loc[db.index.max() + 1] = [fio, birth, child, vac, dep, prof, pay]
+        workers.loc[workers.index.max() + 1] = [fio, birth, child, vac, dep, prof, pay]
         return False
 
 
@@ -105,11 +126,11 @@ def adding_to_children(fio, birth_ch, k_gard):
     :param k_gard: Номер садика
     :return:
     """
-    global db_c
+    global children
     if False in [chars(fio), data(birth_ch), numerical(k_gard)]:
         return False
     else:
-        db_c.loc[db_c.index.max() + 1] = [fio, birth_ch, k_gard]
+        children.loc[children.index.max() + 1] = [fio, birth_ch, k_gard]
  
         
 def adding_to_otdeli(num, date, tel, num_workers):
@@ -120,48 +141,44 @@ def adding_to_otdeli(num, date, tel, num_workers):
     :param k_gard: Номер садика
     :return:
     """
-    global db_o
+    global otdeli
     if False in [numerical(num), correct_data(date), correct_number(tel), numerical(num_workers)]:
         return False
     else:
-        db_o.loc[db_o.index.max() + 1] = [num, date, tel, num_workers]
+        otdeli.loc[otdeli.index.max() + 1] = [num, date, tel, num_workers]
 
 
-def deleting(index):
+def deleting(dict_name, index):
     """
         Удаляет строку по индексу.
     Возвращает копию Dataframe.
     :param index: индекс удаляемой строки
     :return: копия Dataframe без строки.
     """
-    global db
-    return db.drop([int(index)], inplace=False)
+    return return_dict(dict_name).drop([int(index)], inplace=False)
 
 
-def save(obj):
+def save(dict_name, obj):
     """
         Сохраняет копию объекта DataFrame
     в формате Pickle.
     :param obj: полученный объект
     :return:
     """
-    obj.to_pickle('./data/db.pic')
-    pass
+    obj.to_pickle(return_path(dict_name))
 
-
-def back_attr(name):
-    global db
+def back_attr(dict_name, name):
     """
         Функция возвращает поле по имени заданного атрибута
     :param R: База данных
     :param name: Имя запрашиваемого атрибута
     :return: Объект DataFrame
     """
-    return db[[name]]
+    return return_dict(dict_name)[[name]]
 
 
-def back_named_col(names):
-    global db
+
+def back_named_col(dict_name, names):
     """
         Функция возвращает множество полей, по заданным атрибутам,
     если таковые имеются. (Предусмотрена проверка наличия набора)
@@ -169,13 +186,10 @@ def back_named_col(names):
     :param names: кортеж из наборов атрибутов
     :return: Множество полей в объекте DataFrame
     """
-    return db[[s.strip() for s in names.split(',')]]
+    return return_dict(dict_name)[[s.strip() for s in names.split(',')]]
 
 
-def back_names_cond(names,
-                    by_name,
-                    condition):
-    global db
+def back_names_cond(dict_name, names, by_name, condition):
     """
         Функция возвращает поля атрибутов names если параметр
         by_name удовлетворяет condition.
@@ -185,6 +199,7 @@ def back_names_cond(names,
     :param condition: условие для проверки по объекту by_name
     :return: набор атрибутов в объекте DataFrame
     """
+    db = return_dict(dict_name)
     try:
         return db.loc[db[by_name] == int(condition),
                       [s.strip() for s in names.split(',')]]
@@ -193,10 +208,7 @@ def back_names_cond(names,
                       [s.strip() for s in names.split(',')]]
 
 
-def back_many_cond(names,
-                   by_names: str,
-                   conditions: str):
-    global db
+def back_many_cond(dict_name, names, by_names: str, conditions: str):
     """
         Функция возвращает поля атрибутов names если параметры:
     by_name[i] удовлетворяет condition[i] (len = 2)
@@ -207,6 +219,7 @@ def back_many_cond(names,
     :param conditions: набор условий для каждого i-того имени
     :return:
     """
+    db = return_dict(dict_name)
     cond = [s.strip() for s in conditions.split(',')]
     b_n = [s.strip() for s in by_names.split(',')]
     # Проверка на числовые параметры
@@ -259,15 +272,6 @@ def correct_data(data_str):
             return False
     else:
         return False
-
-def back_columns():
-    global db
-    return db.columns.get_level_values(0).tolist()
-
-def back_value_columns():
-    global db
-    columns = db.columns.get_level_values(0).tolist()
-    return []
 
 def scatter():
     """
