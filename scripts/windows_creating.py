@@ -4,6 +4,7 @@
 """
 import tkinter as tk
 from tkinter import ttk
+from tkinter import messagebox
 from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
     back_attr, back_named_col, back_names_cond, back_many_cond, \
     get_workers, get_children, get_deps, make_plot
@@ -352,7 +353,10 @@ def back_graph_rep(rt, content):
         elif dict_type == 'Отделы':
             if graph_type == 'Столбчатая диаграмма':
                 reports = ['Столбчатая диаграмма распределения сотрудников по отделам']
-        rep_combobox.configure(values=reports)
+        try:
+            rep_combobox.configure(values=reports)
+        except NameError:
+            messagebox.showerror("Error", "Вызываемого атрибута не существует")
 
     for widget in content.winfo_children():
         widget.destroy()
@@ -462,5 +466,8 @@ def create_otchet_window(root, text, df):
     """
     Создание окна текстового отчета
     """
-    text.delete(1.0, tk.END)
-    text.insert(1.0, df.to_string())
+    try:
+        text.delete(1.0, tk.END)
+        text.insert(1.0, df.to_string())
+    except AttributeError:
+        messagebox.showerror("Error", "Вызов несуществующего атрибута")
