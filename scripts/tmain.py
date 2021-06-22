@@ -11,12 +11,11 @@ from windows_creating import add_workers_row, add_children_row, \
     many_attr_search_filter, back_graph_rep, show_dict_workers, \
     show_dict_children, show_dict_deps
 
-
 PTH = os.getcwd()
 os.chdir(PTH[:len(PTH) - 8])
 
 rt = tk.Tk()
-rt.geometry('1000x850')
+rt.geometry('1280x720')
 rt.resizable(False, False)
 
 fr = ttk.Frame(rt)
@@ -43,9 +42,8 @@ file.add_command(label='Завершить работу', command=lambda: end(rt
 text_report = tk.Menu(mainmenu, tearoff=0)
 text_report.add_command(label='Отчет по одному атрибуту', command=lambda: one_attr_search(rt, fr))
 text_report.add_command(label='Отчет по одному атрибуту с фильтром', command=lambda: one_attr_search_filter(rt, fr))
-text_report.add_command(label='Отчет по двум атрибутам', command=lambda: many_attr_search(rt, fr))
+text_report.add_command(label='Отчет по множеству атрибутов', command=lambda: many_attr_search(rt, fr))
 text_report.add_command(label='Отчет по двум атрибутам с фильтром', command=lambda: many_attr_search_filter(rt, fr))
-
 
 cfg = tk.Menu(mainmenu, tearoff=0)
 

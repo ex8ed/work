@@ -4,9 +4,8 @@
 для составления графических и текстовых отчетов.
 Содержит набор функций проверки формата.
 """
-import os
 import pandas as pd
-import tkinter as tk
+from tkinter import messagebox
 import matplotlib.pyplot as plt
 from tkinter import filedialog as fld
 
@@ -71,16 +70,15 @@ def load():
     global otdeli
     global workers
     global db
-    ftypes = [('Pickle файлы', '*.pic'), ('Все файлы', '*')]
-    dlg = fld.Open(filetypes=ftypes)
+    f_types = [('Pickle файлы', '*.pic'), ('Все файлы', '*')]
+    dlg = fld.Open(filetypes=f_types)
     fl = dlg.show()
     if len(fl) != 0:
-
         db = pd.read_pickle('./data/db.pic')
         workers = pd.read_pickle('./data/workers.pic')
         children = pd.read_pickle('./data/children.pic')
         otdeli = pd.read_pickle('./data/otdeli.pic')
-        tk.messagebox.showinfo('Файл', 'Файл открыт успешно')
+        messagebox.showinfo('Info page', 'Файл открыт успешно')
     pass
 
 
@@ -136,6 +134,7 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     global workers
     if False in [chars(fio), correct_data(birth), chars(child), chars(vac), numerical(dep),
                  numerical(pay)]:
+        messagebox.showerror("Error", "Данные введены некорректно!")
         return False
     else:
         workers.loc[workers.index.max() + 1] = [fio, birth, child, vac, dep, prof, pay]
@@ -152,6 +151,7 @@ def adding_to_children(fio, birth_ch, k_gard):
     """
     global children
     if False in [chars(fio), correct_data(birth_ch), numerical(k_gard)]:
+        messagebox.showerror("Error", "Данные введены некорректно!")
         return False
     else:
         children.loc[children.index.max() + 1] = [fio, birth_ch, k_gard]
@@ -168,6 +168,7 @@ def adding_to_otdeli(num, date, tel, num_workers):
     """
     global otdeli
     if False in [numerical(num), correct_data(date), correct_number(tel), numerical(num_workers)]:
+        messagebox.showerror("Error", "Неверный формат данных")
         return False
     else:
         otdeli.loc[otdeli.index.max() + 1] = [num, date, tel, num_workers]
@@ -180,13 +181,17 @@ def deleting(dict_name, index):
     :param index: индекс удаляемой строки
     :return: копия Dataframe без строки.
     """
-    return return_dict(dict_name).drop([int(index)], inplace=False)
+    try:
+        return return_dict(dict_name).drop([int(index)], inplace=False)
+    except KeyError:
+        messagebox.showerror("Error", "Индекс не найден")
 
 
 def save(dict_name, obj):
     """
         Сохраняет копию объекта DataFrame
     в формате Pickle.
+    :param dict_name: наименование словаря
     :param obj: полученный объект
     :return:
     """
@@ -196,41 +201,50 @@ def save(dict_name, obj):
 def back_attr(dict_name, name):
     """
         Функция возвращает поле по имени заданного атрибута
-    :param R: База данных
+    :param dict_name: наименование словаря
     :param name: Имя запрашиваемого атрибута
     :return: Объект DataFrame
     """
-    return return_dict(dict_name)[[name]]
+    try:
+        return return_dict(dict_name)[[name]]
+    except KeyError:
+        messagebox.showerror("Error", "Вызываемого поля не существует")
 
 
 def back_named_col(dict_name, names):
     """
         Функция возвращает множество полей, по заданным атрибутам,
     если таковые имеются. (Предусмотрена проверка наличия набора)
-    :param R: База данных
+    :param dict_name: наименование словаря
     :param names: кортеж из наборов атрибутов
     :return: Множество полей в объекте DataFrame
     """
-    return return_dict(dict_name)[[s.strip() for s in names.split(',')]]
+    try:
+        return return_dict(dict_name)[[s.strip() for s in names.split(',')]]
+    except KeyError:
+        messagebox.showerror("Error", "Вызываемого поля не существует")
 
 
 def back_names_cond(dict_name, names, by_name, condition):
     """
         Функция возвращает поля атрибутов names если параметр
         by_name удовлетворяет condition.
-    :param R: база данных
+    :param dict_name: наименование словаря
     :param names: имена выводимых атрибутов
     :param by_name: имя атрибута, по которому происходит сравнение
     :param condition: условие для проверки по объекту by_name
     :return: набор атрибутов в объекте DataFrame
     """
-    db = return_dict(dict_name)
+    global db
     try:
+        db = return_dict(dict_name)
         return db.loc[db[by_name] == int(condition),
                       [s.strip() for s in names.split(',')]]
     except ValueError:
         return db.loc[db[by_name] == condition,
                       [s.strip() for s in names.split(',')]]
+    except KeyError:
+        messagebox.showerror("Error", "Вызываемого поля не существует")
 
 
 def back_many_cond(dict_name, names, by_names: str, conditions: str):
@@ -238,7 +252,7 @@ def back_many_cond(dict_name, names, by_names: str, conditions: str):
         Функция возвращает поля атрибутов names если параметры:
     by_name[i] удовлетворяет condition[i] (len = 2)
     :param conditions: Набор условий
-    :param R: База данных
+    :param dict_name: наименование словаря
     :param names: имена выводимых атрибутов
     :param by_names: набор имен, по которым происходит отбор соотв. условия из conditions
     :param conditions: набор условий для каждого i-того имени
@@ -257,8 +271,10 @@ def back_many_cond(dict_name, names, by_names: str, conditions: str):
         cond1 = db[b_n[1]] == int(cond[1])
     except ValueError:
         cond1 = db[b_n[1]] == cond[1]
-
-    return db.loc[cond0 & cond1, [s.strip() for s in names.split(',')]]
+    try:
+        return db.loc[cond0 & cond1, [s.strip() for s in names.split(',')]]
+    except KeyError:
+        messagebox.showerror("Error", "Вызываемого поля не существует")
 
 
 def scatter():
