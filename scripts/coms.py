@@ -9,6 +9,11 @@ from tkinter import messagebox
 import matplotlib.pyplot as plt
 from tkinter import filedialog as fld
 
+global children
+global otdeli
+global workers
+global db
+
 
 def chars(string):
     if ''.join(string.split()).isalpha():
@@ -159,11 +164,11 @@ def adding_to_children(fio, birth_ch, k_gard):
 
 def adding_to_otdeli(num, date, tel, num_workers):
     """
-    Добавляет строку в справочник children
-    Параметры
-    :param fio: ФИО Ребенка
-    :param birth_ch: Дата рождения ребенка
-    :param k_gard: Номер садика
+    Добавляет строку в справочник otdeli
+    :param num: номер
+    :param date: дата создания отдела
+    :param tel: номер телефона
+    :param num_workers: Количество работников
     :return:
     """
     global otdeli
@@ -178,6 +183,7 @@ def deleting(dict_name, index):
     """
         Удаляет строку по индексу.
     Возвращает копию Dataframe.
+    :param dict_name: наименование словаря
     :param index: индекс удаляемой строки
     :return: копия Dataframe без строки.
     """
@@ -258,6 +264,7 @@ def back_many_cond(dict_name, names, by_names: str, conditions: str):
     :param conditions: набор условий для каждого i-того имени
     :return:
     """
+    global db
     db = return_dict(dict_name)
     cond = [s.strip() for s in conditions.split(',')]
     b_n = [s.strip() for s in by_names.split(',')]
