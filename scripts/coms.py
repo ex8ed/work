@@ -17,7 +17,7 @@ global db
 
 
 def chars(string):
-    if ''.join(string.split()).isalpha():
+    if ''.join([x.strip() for x in string.replace('.', ' ').split()]).isalpha():
         return string
     return False
 
