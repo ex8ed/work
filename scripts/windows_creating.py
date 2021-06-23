@@ -36,11 +36,12 @@ def add_workers_row(rt, content):
     attr_list = [fio_entry.get(), birth_entry.get(), child_entry.get(),
                  vac_entry.get(), dep_entry.get(), prof_entry.get(), pay_entry.get()]
     add = tk.Button(content, text='Добавить запись', width=20,
-                    command=lambda: adding_to_workers(attr_list))
+                    command=lambda: adding_to_workers(*attr_list))
     update = tk.Button(content, text='Обновить запись', width=20)
     df = get_workers()
     delete = tk.Button(content, text='Удалить запись', width=20,
-                       command=lambda: deleting(df.loc[df.isin(attr_list).any(axis=1)].index.tolist()))
+                       command=lambda: deleting(df.loc[df.isin(attr_list).any(axis=1)].index.tolist(),
+                                                df.loc[df.isin(attr_list).any(axis=1)].index[0]))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)

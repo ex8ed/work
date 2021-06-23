@@ -24,9 +24,12 @@ fr = ttk.Frame(rt)
 mainmenu = tk.Menu(rt, tearoff=0)
 
 add_row = tk.Menu(mainmenu, tearoff=0)
-add_row.add_command(label='Добавить запись в справочник Workers', command=lambda: add_workers_row(rt, fr))
-add_row.add_command(label='Добавить запись в справочник Children', command=lambda: add_children_row(rt, fr))
-add_row.add_command(label='Добавить запись в справочник Otdeli', command=lambda: add_otdeli_row(rt, fr))
+add_row.add_command(label='Добавить запись в справочник Workers',
+                    command=lambda: add_workers_row(rt, fr))
+add_row.add_command(label='Добавить запись в справочник Children',
+                    command=lambda: add_children_row(rt, fr))
+add_row.add_command(label='Добавить запись в справочник Otdeli',
+                    command=lambda: add_otdeli_row(rt, fr))
 
 show_dict = tk.Menu(mainmenu, tearoff=0)
 show_dict.add_command(label='Словарь рабочих', command=lambda: show_dict_workers(rt, fr))
@@ -41,9 +44,11 @@ file.add_command(label='Завершить работу', command=lambda: end(rt
 
 text_report = tk.Menu(mainmenu, tearoff=0)
 text_report.add_command(label='Отчет по одному атрибуту', command=lambda: one_attr_search(rt, fr))
-text_report.add_command(label='Отчет по множеству атрибутов по одному ключу', command=lambda: one_attr_search_filter(rt, fr))
+text_report.add_command(label='Отчет по множеству атрибутов по одному ключу',
+                        command=lambda: one_attr_search_filter(rt, fr))
 text_report.add_command(label='Отчет по множеству атрибутов', command=lambda: many_attr_search(rt, fr))
-text_report.add_command(label='Отчет по множеству атрибутов по двум ключам', command=lambda: many_attr_search_filter(rt, fr))
+text_report.add_command(label='Отчет по множеству атрибутов по двум ключам',
+                        command=lambda: many_attr_search_filter(rt, fr))
 
 cfg = tk.Menu(mainmenu, tearoff=0)
 

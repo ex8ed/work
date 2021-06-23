@@ -140,6 +140,8 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     global workers
     if False in [chars(fio), correct_data(birth), chars(child), chars(vac), numerical(dep),
                  numerical(pay)]:
+        print([chars(fio), correct_data(birth), chars(child), chars(vac), numerical(dep),
+               numerical(pay)])
         messagebox.showerror("Error", "Данные введены некорректно!")
         return False
     else:
