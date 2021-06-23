@@ -1,6 +1,6 @@
 import matplotlib
 import matplotlib.pyplot as plt
-from coms import workers, children, otdeli
+from db_interaction import workers, children, otdeli
 
 def scatter():
     """

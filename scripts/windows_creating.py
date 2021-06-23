@@ -5,7 +5,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
+from db_interaction import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
     save, back_attr, back_named_col, back_names_cond, back_many_cond, \
     get_workers, get_children, get_deps
 from plotting import make_plot
@@ -373,7 +373,7 @@ def back_graph_rep(rt, content):
                                                   'Отделы'], width=50)
     graph_combobox = ttk.Combobox(content, values=['Гистограмма', 'Диаграмма рассеивания',
                                                    'Столбчатая диаграмма'], width=50)
-    button_1 = tk.Button(content, text='Подтвердить', command=on_click)
+    button_1 = tk.Button(content, text='Показать доступные отчеты', command=on_click)
     rep_combobox = ttk.Combobox(content, values=reports, width=50)
     button_2 = tk.Button(content, text='Вывести',
                          command=lambda: make_plot(dict_combobox.get(), graph_combobox.get(),
@@ -474,3 +474,17 @@ def create_otchet_window(root, text, df):
         text.insert(1.0, df.to_string())
     except AttributeError:
         messagebox.showerror("Error", "Вызов несуществующего атрибута")
+
+def change_row(rt, content, db_name):
+    for widget in content.winfo_children():
+        widget.destroy()
+
+    label = tk.Label(content, text='Редактирование и удаление записей')
+    num_label = tk.Label(content, text='Введите индекс:')
+    index_entry = ttk.Entry(content, width=40)
+    add = tk.Button(content, text='Получить запись', width=20)
+    content.grid(column=0, row=0)
+    label.grid(column=0, row=0)
+    num_label.grid(column=0, row=1)
+    index_entry.grid(column=2, row=1)
+    add.grid(column=3, row=1)
