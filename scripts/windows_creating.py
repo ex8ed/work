@@ -36,11 +36,7 @@ def add_workers_row(rt, content):
     add = tk.Button(content, text='Добавить запись', width=20,
                     command=lambda: adding_to_workers(fio_entry.get(), birth_entry.get(), child_entry.get(),
                     vac_entry.get(), dep_entry.get(), prof_entry.get(), pay_entry.get()))
-    update = tk.Button(content, text='Обновить запись', width=20)
     df = get_workers()
-    delete = tk.Button(content, text='Удалить запись', width=20,
-                       command=lambda: deleting(df.loc[df.isin(attr_list).any(axis=1)].index.tolist(),
-                                                df.loc[df.isin(attr_list).any(axis=1)].index[0]))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -59,8 +55,6 @@ def add_workers_row(rt, content):
     prof_entry.grid(column=3, row=6, columnspan=2)
     pay_entry.grid(column=3, row=7, columnspan=2)
     add.grid(column=3, row=9, columnspan=2)
-    update.grid(column=3, row=10, columnspan=2)
-    delete.grid(column=3, row=11, columnspan=2)
 
 
 def add_children_row(rt, content):
@@ -82,12 +76,8 @@ def add_children_row(rt, content):
                     command=lambda: adding_to_children(fio_entry.get(),
                                                        birth_entry.get(),
                                                        garden_entry.get()))
-    update = tk.Button(content, text='Обновить запись', width=20, \
-                       command=lambda: save())
     df = get_children()
     print(df.loc[df.isin(['a','01.01.2001',1]).any(axis=1)].index.tolist())
-    delete = tk.Button(content, text='Удалить запись', width=20,
-                       command=lambda: deleting('Дети работников', df.loc[df.isin(attr_list).any(axis=1)].index.tolist()))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -98,9 +88,6 @@ def add_children_row(rt, content):
     birth_entry.grid(column=3, row=2, columnspan=2)
     garden_entry.grid(column=3, row=3, columnspan=2)
     add.grid(column=3, row=9, columnspan=2)
-    update.grid(column=3, row=10, columnspan=2)
-    delete.grid(column=3, row=11, columnspan=2)
-
 
 def add_otdeli_row(rt, content):
     """
@@ -121,8 +108,6 @@ def add_otdeli_row(rt, content):
     add = tk.Button(content, text='Добавить запись', width=20,
                     command=lambda: adding_to_otdeli(num_entry.get(), date_entry.get(),
                                                      tel_entry.get(), num_workers_entry.get()))
-    update = tk.Button(content, text='Обновить запись', width=20)
-    delete = tk.Button(content, text='Удалить запись', width=20, command=deleting)
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -135,8 +120,6 @@ def add_otdeli_row(rt, content):
     tel_entry.grid(column=3, row=3, columnspan=2)
     num_workers_entry.grid(column=3, row=4, columnspan=2)
     add.grid(column=3, row=9, columnspan=2)
-    update.grid(column=3, row=10, columnspan=2)
-    delete.grid(column=3, row=11, columnspan=2)
 
 
 def one_attr_search(rt, content):
