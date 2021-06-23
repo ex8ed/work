@@ -3,7 +3,6 @@
 Скрипт, содержащий функции для создания окон и работы с ними
 """
 import tkinter as tk
-import pandas as pd
 from tkinter import ttk
 from tkinter import messagebox
 from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
