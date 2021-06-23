@@ -4,6 +4,7 @@
 для составления графических и текстовых отчетов.
 Содержит набор функций проверки формата.
 """
+import os
 import pandas as pd
 from tkinter import messagebox
 import matplotlib.pyplot as plt
@@ -155,6 +156,7 @@ def adding_to_children(fio, birth_ch, k_gard):
     :return:
     """
     global children
+    print([chars(fio), correct_data(birth_ch), numerical(k_gard)])
     if False in [chars(fio), correct_data(birth_ch), numerical(k_gard)]:
         messagebox.showerror("Error", "Данные введены некорректно!")
         return False
@@ -187,13 +189,14 @@ def deleting(dict_name, index):
     :param index: индекс удаляемой строки
     :return: копия Dataframe без строки.
     """
+    print(index)
     try:
-        return return_dict(dict_name).drop([int(index)], inplace=False)
+        return_dict(dict_name).drop([index], inplace=False)
     except KeyError:
         messagebox.showerror("Error", "Индекс не найден")
 
 
-def save(dict_name, obj):
+def save():
     """
         Сохраняет копию объекта DataFrame
     в формате Pickle.
@@ -201,7 +204,14 @@ def save(dict_name, obj):
     :param obj: полученный объект
     :return:
     """
-    obj.to_pickle(return_path(dict_name))
+    global workers
+    global children
+    global otdeli
+    path = os.getcwd()
+    workers.to_pickle(path + '/data/workers.pic')
+    children.to_pickle(path + '/data/children.pic')
+    otdeli.to_pickle(path + '/data/otdeli.pic')
+    return 0
 
 
 def back_attr(dict_name, name):
@@ -241,7 +251,7 @@ def back_names_cond(dict_name, names, by_name, condition):
     :param condition: условие для проверки по объекту by_name
     :return: набор атрибутов в объекте DataFrame
     """
-    global db
+    db = return_dict(dict_name)
     try:
         db = return_dict(dict_name)
         return db.loc[db[by_name] == int(condition),
@@ -264,7 +274,6 @@ def back_many_cond(dict_name, names, by_names: str, conditions: str):
     :param conditions: набор условий для каждого i-того имени
     :return:
     """
-    global db
     db = return_dict(dict_name)
     cond = [s.strip() for s in conditions.split(',')]
     b_n = [s.strip() for s in by_names.split(',')]

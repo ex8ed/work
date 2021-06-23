@@ -3,10 +3,11 @@
 Скрипт, содержащий функции для создания окон и работы с ними
 """
 import tkinter as tk
+import pandas as pd
 from tkinter import ttk
 from tkinter import messagebox
 from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
-    back_attr, back_named_col, back_names_cond, back_many_cond, \
+    save, back_attr, back_named_col, back_names_cond, back_many_cond, \
     get_workers, get_children, get_deps, make_plot
 
 
@@ -81,10 +82,12 @@ def add_children_row(rt, content):
                     command=lambda: adding_to_children(fio_entry.get(),
                                                        birth_entry.get(),
                                                        garden_entry.get()))
-    update = tk.Button(content, text='Обновить запись', width=20)
+    update = tk.Button(content, text='Обновить запись', width=20, \
+                       command=lambda: save())
     df = get_children()
+    print(df.loc[df.isin(['a','01.01.2001',1]).any(axis=1)].index.tolist())
     delete = tk.Button(content, text='Удалить запись', width=20,
-                       command=lambda: deleting(df.loc[df.isin(attr_list).any(axis=1)].index.tolist()))
+                       command=lambda: deleting('Дети работников', df.loc[df.isin(attr_list).any(axis=1)].index.tolist()))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
