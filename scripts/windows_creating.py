@@ -7,7 +7,8 @@ from tkinter import ttk
 from tkinter import messagebox
 from coms import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
     save, back_attr, back_named_col, back_names_cond, back_many_cond, \
-    get_workers, get_children, get_deps, make_plot
+    get_workers, get_children, get_deps
+from plotting import make_plot
 
 
 def add_workers_row(rt, content):
@@ -32,10 +33,9 @@ def add_workers_row(rt, content):
     dep_entry = ttk.Entry(content, width=40)
     prof_entry = ttk.Entry(content, width=40)
     pay_entry = ttk.Entry(content, width=40)
-    attr_list = [fio_entry.get(), birth_entry.get(), child_entry.get(),
-                 vac_entry.get(), dep_entry.get(), prof_entry.get(), pay_entry.get()]
     add = tk.Button(content, text='Добавить запись', width=20,
-                    command=lambda: adding_to_workers(*attr_list))
+                    command=lambda: adding_to_workers(fio_entry.get(), birth_entry.get(), child_entry.get(),
+                    vac_entry.get(), dep_entry.get(), prof_entry.get(), pay_entry.get()))
     update = tk.Button(content, text='Обновить запись', width=20)
     df = get_workers()
     delete = tk.Button(content, text='Удалить запись', width=20,
