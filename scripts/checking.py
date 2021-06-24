@@ -21,10 +21,9 @@ def phone_number(number):
     :param number: данный номер телефона
     :return: Логическая константа-ответ.
     """
-    if len(number) >= 12:
-        E_G = number[1:].replace('-', '')
+    if len(number.replace('-', '')) >= 12:
         try:
-            int(E_G)
+            int(number.replace('-', ''))
             return True
         except ValueError:
             print("Unuseful number format")
