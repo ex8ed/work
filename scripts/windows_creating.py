@@ -36,7 +36,7 @@ def add_workers_row(rt, content):
                  vac_entry.get(), dep_entry.get(), prof_entry.get(), pay_entry.get()]
     add = tk.Button(content, text='Добавить запись', width=20,
                     command=lambda: adding_to_workers(*attr_list))
-    update = tk.Button(content, text='Обновить запись', width=20)
+    update = tk.Button(content, text='Обновить запись', width=20, command=save)
     df = get_workers()
     delete = tk.Button(content, text='Удалить запись', width=20,
                        command=lambda: deleting(df.loc[df.isin(attr_list).any(axis=1)].index.tolist(),
@@ -121,7 +121,7 @@ def add_otdeli_row(rt, content):
     add = tk.Button(content, text='Добавить запись', width=20,
                     command=lambda: adding_to_otdeli(num_entry.get(), date_entry.get(),
                                                      tel_entry.get(), num_workers_entry.get()))
-    update = tk.Button(content, text='Обновить запись', width=20)
+    update = tk.Button(content, text='Обновить запись', width=20, command=save)
     delete = tk.Button(content, text='Удалить запись', width=20, command=deleting)
 
     content.grid(column=0, row=0)
