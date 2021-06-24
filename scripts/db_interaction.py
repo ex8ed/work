@@ -244,9 +244,9 @@ def save_workers(index, fio, birth, child, vac, dep, prof, pay):
     workers.loc[int(index), 'Дата рождения'] = birth
     workers.loc[int(index), 'ФИО Ребенка'] = child
     workers.loc[int(index), 'Прививка от COVID-19'] = vac
-    workers.loc[int(index), 'Номер отдела'] = dep
+    workers.loc[int(index), 'Номер отдела'] = float(dep)
     workers.loc[int(index), 'Должность'] = prof
-    workers.loc[int(index), 'З/П в месяц'] = pay
+    workers.loc[int(index), 'З/П в месяц'] = float(pay)
     save()
 
 def save_children(index, fio, birth, garden):
