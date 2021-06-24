@@ -4,7 +4,7 @@
 для составления графических и текстовых отчетов.
 Содержит набор функций проверки формата.
 """
-import os
+
 import pandas as pd
 from tkinter import messagebox
 from checking import chars, numerical, phone_number, data
@@ -29,7 +29,7 @@ def init_db():
     children = pd.read_pickle('../data/children.pic')
     otdeli = pd.read_pickle('../data/otdeli.pic')
 
-        
+
 def load_default_text():
     """
     Returns
@@ -89,7 +89,8 @@ def return_dict(dict_name):
     Returns
     -------
     TYPE pandas.dataframe либо None
-        Возвращает соотвествующий справочник либо None если было введено некорректное название
+        Возвращает соотвествующий справочник либо None
+        если было введено некорректное название
     """
     if dict_name == 'Работники':
         return workers
@@ -130,7 +131,6 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     if False in [chars(fio), data(birth), chars(child), chars(vac), numerical(dep),
                  numerical(pay)]:
         messagebox.showerror("Error", "Данные введены некорректно")
-        return False
     else:
         workers.loc[workers.index.max() + 1] = [fio, data_transfer(birth),
                                                 child, vac, dep, prof, pay]
@@ -149,7 +149,6 @@ def adding_to_children(fio, birth_ch, k_gard):
     global children
     if False in [chars(fio), data(birth_ch), numerical(k_gard)]:
         messagebox.showerror("Error", "Данные введены некорректно!")
-        return False
     else:
         children.loc[children.index.max() + 1] = [fio, data_transfer(birth_ch), k_gard]
         save()
@@ -168,7 +167,6 @@ def adding_to_otdeli(num, date, tel, num_workers):
     global otdeli
     if False in [numerical(num), data(date), phone_number(tel), numerical(num_workers)]:
         messagebox.showerror("Error", "Неверный формат данных")
-        return False
     else:
         otdeli.loc[otdeli.index.max() + 1] = [num,
                                               data_transfer(date), tel, num_workers]
@@ -199,10 +197,9 @@ def save():
     global workers
     global children
     global otdeli
-    path = os.getcwd()
-    workers.to_pickle(path + '/data/workers.pic')
-    children.to_pickle(path + '/data/children.pic')
-    otdeli.to_pickle(path + '/data/otdeli.pic')
+    workers.to_pickle('./data/workers.pic')
+    children.to_pickle('./data/children.pic')
+    otdeli.to_pickle('./data/otdeli.pic')
     messagebox.showinfo("Info", "Сохранение прошло успешно")
 
 
