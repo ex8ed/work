@@ -5,8 +5,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from db_interaction import adding_to_workers, adding_to_children, adding_to_otdeli, deleting, \
-    save, back_attr, back_named_col, back_names_cond, back_many_cond, \
+from db_interaction import adding_to_workers, adding_to_children, adding_to_otdeli, \
+    back_attr, back_named_col, back_names_cond, back_many_cond, \
     get_workers, get_children, get_deps, return_dict, remove_workers, \
     remove_children, remove_otdeli, save_workers, save_children, save_otdeli
 from plotting import make_plot
@@ -37,8 +37,6 @@ def add_workers_row(rt, content):
     add = tk.Button(content, text='Добавить запись', width=20,
                     command=lambda: adding_to_workers(fio_entry.get(), birth_entry.get(), child_entry.get(),
                     vac_entry.get(), dep_entry.get(), prof_entry.get(), pay_entry.get()))
-    df = get_workers()
-
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
     fio_label.grid(column=0, row=1)
@@ -72,7 +70,6 @@ def add_children_row(rt, content):
     fio_entry = ttk.Entry(content, width=40)
     birth_entry = ttk.Entry(content, width=40)
     garden_entry = ttk.Entry(content, width=40)
-    attr_list = [fio_entry.get(), birth_entry.get(), garden_entry.get()]
     add = tk.Button(content, text='Добавить запись', width=20,
                     command=lambda: adding_to_children(fio_entry.get(),
                                                        birth_entry.get(),
@@ -221,7 +218,7 @@ def one_attr_search_filter(rt, content):
     filt = tk.StringVar()
     val = tk.StringVar()
 
-    label = tk.Label(content, text='Вывод текстового отчета по нескольким атрибутам')
+    label = tk.Label(content, text='Вывод текстового отчета по одному атрибуту с одним ключом')
     df_label = tk.Label(content, text='Справочник')
     attr_label = tk.Label(content, text='Атрибут')
     filt_label = tk.Label(content, text='Атрибут, по которому будет отбор')
@@ -274,7 +271,7 @@ def many_attr_search_filter(rt, content):
     filt = tk.StringVar()
     val = tk.StringVar()
 
-    label = tk.Label(content, text='Вывод текстового отчета по нескольким атрибутам')
+    label = tk.Label(content, text='Вывод текстового отчета по нескольким атрибутам, с несколькими ключами')
     df_label = tk.Label(content, text='Справочник')
     attr_label = tk.Label(content, text='Атрибуты (писать через запятую)')
     filt_label = tk.Label(content, text='Атрибуты, по которым будет отбор')
@@ -455,9 +452,14 @@ def create_otchet_window(root, text, df):
     """
     try:
         text.delete(1.0, tk.END)
-        text.insert(1.0, df.to_string())
+        if df.shape[0] > 0:
+            text.delete(1.0, tk.END)
+            text.insert(1.0, df.to_string())
+        else:
+            text.insert(1.0, 'Не найдено совпадений')
     except AttributeError:
-        messagebox.showerror("Error", "Вызов несуществующего атрибута")
+        #messagebox.showerror("Error", "Вызов несуществующего атрибута")
+        pass
 
 def change_row(rt, content, db_name):
     """
@@ -481,12 +483,17 @@ def show_entry(rt, content, index, db_name):
     Создание окна для мзменения или удаления записи
     """
     db = return_dict(db_name)
-    if db_name == 'Работники':
-        show_workers_entry(rt, content, index, db)
-    elif db_name == 'Дети работников':
-        show_children_entry(rt, content, index, db)
-    elif db_name == 'Отделы':
-        show_otdeli_entry(rt, content, index, db)
+    try:
+        index=int(index)
+        if db_name == 'Работники':
+            show_workers_entry(rt, content, index, db)
+        elif db_name == 'Дети работников':
+            show_children_entry(rt, content, index, db)
+        elif db_name == 'Отделы':
+            show_otdeli_entry(rt, content, index, db)
+    except ValueError:
+        tk.messagebox.showerror('Ошибка', 'Введенный индекс записи не является числом')
+    
 
 def show_workers_entry(rt, content, index, db):
     """
@@ -495,8 +502,11 @@ def show_workers_entry(rt, content, index, db):
     for widget in content.winfo_children():
         widget.destroy()
 
-    print(db.loc[int(index), :])
-    fio, birth, child, vac, dep, prof, pay = db.loc[int(index), :]
+    if index <= db.shape[0]:
+        fio, birth, child, vac, dep, prof, pay = db.loc[index, :]
+    else:
+        tk.messagebox.showerror('Ошибка', 'Записи с данным индексом не существует', command=change_row(rt, content, 'Работники'))
+        return 0
 
     label = tk.Label(content, text='Запись под индексом {}'.format(index))
     fio_label = tk.Label(content, text='ФИО')
@@ -553,7 +563,11 @@ def show_children_entry(rt, content, index, db):
     for widget in content.winfo_children():
         widget.destroy()
 
-    fio, birth, garden = db.loc[int(index), :]
+    if index <= db.shape[0]:
+        fio, birth, garden = db.loc[index, :]
+    else:
+        tk.messagebox.showerror('Ошибка', 'Записи с данным индексом не существует', command=change_row(rt, content, 'Дети работников'))
+        return 0
 
     label = tk.Label(content, text='Добавление, редактирование и удаление записей')
     fio_label = tk.Label(content, text='ФИО ребенка')
@@ -593,7 +607,11 @@ def show_otdeli_entry(rt, content, index, db):
     for widget in content.winfo_children():
         widget.destroy()
 
-    num, date, tel, num_workers = db.loc[int(index), :]
+    if index <= db.shape[0]:
+        num, date, tel, num_workers = db.loc[index, :]
+    else:
+        tk.messagebox.showerror('Ошибка', 'Записи с данным индексом не существует', command=change_row(rt, content, 'Отделы'))
+        return 0
 
     label = tk.Label(content, text='Добавление, редактирование и удаление записей')
     num_label = tk.Label(content, text='Номер отдела')

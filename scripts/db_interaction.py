@@ -20,8 +20,6 @@ def init_db():
     global children
     global otdeli
     global workers
-    global db
-    db = pd.read_pickle('../data/db.pic')
     workers = pd.read_pickle('../data/workers.pic')
     children = pd.read_pickle('../data/children.pic')
     otdeli = pd.read_pickle('../data/otdeli.pic')
@@ -142,6 +140,9 @@ def save():
     global children
     global otdeli
     path = os.getcwd()
+    workers.to_pickle(path + '/data/workers.pic')
+    children.to_pickle(path + '/data/children.pic')
+    otdeli.to_pickle(path + '/data/otdeli.pic')
     return 0
 
 
@@ -244,9 +245,9 @@ def save_workers(index, fio, birth, child, vac, dep, prof, pay):
     workers.loc[int(index), 'Дата рождения'] = birth
     workers.loc[int(index), 'ФИО Ребенка'] = child
     workers.loc[int(index), 'Прививка от COVID-19'] = vac
-    workers.loc[int(index), 'Номер отдела'] = dep
+    workers.loc[int(index), 'Номер отдела'] = float(dep)
     workers.loc[int(index), 'Должность'] = prof
-    workers.loc[int(index), 'З/П в месяц'] = pay
+    workers.loc[int(index), 'З/П в месяц'] = float(pay)
     save()
 
 def save_children(index, fio, birth, garden):
