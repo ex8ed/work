@@ -310,14 +310,10 @@ def many_attr_search_filter(content):
 def back_graph_rep(content):
     """
     Функция для составления графических отчетов
-    :param content:
-    :return:
     """
-
     def on_click():
         """
         Подфункция для считывания значения combobox
-        :return:
         """
         global reports
         dict_type = dict_combobox.get()
@@ -377,7 +373,6 @@ def show_dict_workers(content):
     """
     Функция для работы со словарями справочника workers
     :param content:
-    :return:
     """
     for widget in content.winfo_children():
         widget.destroy()
@@ -401,7 +396,6 @@ def show_dict_children(content):
     """
     Функция для работы со словарями справочника children
     :param content:
-    :return:
     """
     for widget in content.winfo_children():
         widget.destroy()
@@ -425,7 +419,6 @@ def show_dict_deps(content):
     """
     Функция для работы со словарями справочника otdeli
     :param content:
-    :return:
     """
     for widget in content.winfo_children():
         widget.destroy()
@@ -482,7 +475,7 @@ def change_row(content, db_name):
 
 def show_entry(content, index, db_name):
     """
-    Создание окна для мзменения или удаления записи
+    Создание окна для изменения или удаления записи
     """
     db = return_dict(db_name)
     if numerical(index):
@@ -508,7 +501,7 @@ def show_workers_entry(content, index, db):
     else:
         tk.messagebox.showerror('Ошибка', 'Записи с данным индексом не существует',
                                 command=change_row(content, 'Работники'))
-        return 0
+        return
 
     label = tk.Label(content, text='Запись под индексом {}'.format(index))
     fio_label = tk.Label(content, text='ФИО')
