@@ -7,8 +7,8 @@ from tkinter import ttk
 from tkinter import messagebox
 from db_interaction import adding_to_workers, adding_to_children, adding_to_otdeli, \
     back_attr, back_named_col, back_names_cond, back_many_cond, \
-    get_workers, get_children, get_deps, return_dict, remove_workers, \
-    remove_children, remove_otdeli, save_workers, save_children, save_otdeli
+    return_dict, remove_workers, remove_children, remove_otdeli, \
+    save_workers, save_children, save_otdeli
 from checking import numerical
 from plotting import make_plot
 
@@ -396,7 +396,7 @@ def show_dict_workers(rt, content):
     xs.grid(column=0, row=2, sticky='we')
     ys.grid(column=1, row=1, sticky='ns')
     text.grid(column=0, row=1, sticky='nwes')
-    text.insert(1.0, get_workers().to_string())
+    text.insert(1.0, return_dict('Работники').to_string())
 
 
 def show_dict_children(rt, content):
@@ -421,7 +421,7 @@ def show_dict_children(rt, content):
     xs.grid(column=0, row=2, sticky='we')
     ys.grid(column=1, row=1, sticky='ns')
     text.grid(column=0, row=1, sticky='nwes')
-    text.insert(1.0, get_children().to_string())
+    text.insert(1.0, return_dict('Дети работников').to_string())
 
 
 def show_dict_deps(rt, content):
@@ -446,7 +446,7 @@ def show_dict_deps(rt, content):
     xs.grid(column=0, row=2, sticky='we')
     ys.grid(column=1, row=1, sticky='ns')
     text.grid(column=0, row=1, sticky='nwes')
-    text.insert(1.0, get_deps().to_string())
+    text.insert(1.0, return_dict('Отделы').to_string())
 
 
 def create_otchet_window(root, text, df):
@@ -545,6 +545,8 @@ def show_workers_entry(rt, content, index, db):
                                                     prof_entry.get(), pay_entry.get()))
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_workers(index))
+    return_back = tk.Button(content, text='Назад', width=20, \
+                            command=lambda: change_row(rt, content, 'Работники'))
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
     fio_label.grid(column=0, row=1)
@@ -561,8 +563,9 @@ def show_workers_entry(rt, content, index, db):
     dep_entry.grid(column=3, row=5, columnspan=2)
     prof_entry.grid(column=3, row=6, columnspan=2)
     pay_entry.grid(column=3, row=7, columnspan=2)
-    saving.grid(column=2, row=9, columnspan=2)
-    removing.grid(column=4, row=9, columnspan=2)
+    saving.grid(column=0, row=9, columnspan=2)
+    removing.grid(column=2, row=9, columnspan=2)
+    return_back.grid(column=4, row=9, columnspan=2)
 
 
 def show_children_entry(rt, content, index, db):
@@ -597,6 +600,8 @@ def show_children_entry(rt, content, index, db):
                                                      garden_entry.get()))
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_children(index))
+    return_back = tk.Button(content, text='Назад', width=20, \
+                            command=lambda: change_row(rt, content, 'Дети работников'))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -606,8 +611,9 @@ def show_children_entry(rt, content, index, db):
     fio_entry.grid(column=3, row=1, columnspan=2)
     birth_entry.grid(column=3, row=2, columnspan=2)
     garden_entry.grid(column=3, row=3, columnspan=2)
-    saving.grid(column=2, row=9, columnspan=2)
-    removing.grid(column=4, row=9, columnspan=2)
+    saving.grid(column=0, row=9, columnspan=2)
+    removing.grid(column=2, row=9, columnspan=2)
+    return_back.grid(column=4, row=9, columnspan=2)
 
 
 def show_otdeli_entry(rt, content, index, db):
@@ -645,6 +651,8 @@ def show_otdeli_entry(rt, content, index, db):
                                                    tel_entry.get(), num_workers_entry.get()))
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_otdeli(index))
+    return_back = tk.Button(content, text='Назад', width=20, \
+                            command=lambda: change_row(rt, content, 'Отделы'))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -655,5 +663,6 @@ def show_otdeli_entry(rt, content, index, db):
     num_entry.grid(column=3, row=1, columnspan=2)
     date_entry.grid(column=3, row=2, columnspan=2)
     tel_entry.grid(column=3, row=3, columnspan=2)
-    saving.grid(column=2, row=9, columnspan=2)
-    removing.grid(column=4, row=9, columnspan=2)
+    saving.grid(column=0, row=9, columnspan=2)
+    removing.grid(column=2, row=9, columnspan=2)
+    return_back.grid(column=4, row=9, columnspan=2)

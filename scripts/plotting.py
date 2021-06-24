@@ -1,12 +1,12 @@
 import matplotlib.pyplot as plt
-from db_interaction import workers, children, otdeli
+from db_interaction import return_dict
 
 
 def scatter():
     """
     Рассеянная диаграмма зарплат работников по возрасту
     """
-    global workers
+    workers = return_dict('Работники')
     salary = workers['З/П в месяц'].values
     for y, x in enumerate(workers['Дата рождения'].values):
         plt.scatter((2020 - int(str(x).split('-')[0])), salary[y], color='Blue')
@@ -18,7 +18,7 @@ def bar_covid():
     """
     Столбчатая диаграмма вакцинированных и невакцинированных от COVID-19
     """
-    global workers
+    workers = return_dict('Работники')
     vaccinated = workers[workers['Прививка от COVID-19'] == 'Да'].shape[0]
     not_vaccinated = workers[workers['Прививка от COVID-19'] == 'Нет'].shape[0]
     plt.bar(['Да', 'Нет'], [vaccinated, not_vaccinated])
@@ -30,7 +30,7 @@ def bar_sadik():
     """
     Столбчатая диаграмма распределения детей по садикам
     """
-    global children
+    children = return_dict('Дети работников')
     children_aggregated = children.groupby('Номер садика').agg({'Дата рождения ребенка': 'count'}).reset_index()
     plt.bar(children_aggregated['Номер садика'], children_aggregated['Дата рождения ребенка'])
     plt.yticks([3, 6, 9, 12, 15, 18, 21])
@@ -42,7 +42,7 @@ def bar_otdel_salary():
     """
     Столбчатая диаграмма средней зп по отделам
     """
-    global workers
+    workers = return_dict('Работники')
     workers_aggregated = workers.groupby('Номер отдела').agg({'З/П в месяц': 'mean'}).reset_index()
     plt.bar(workers_aggregated['Номер отдела'], workers_aggregated['З/П в месяц'])
     plt.xticks([1, 2, 3])
@@ -54,7 +54,7 @@ def bar_otdeli():
     """
     Столбчатая диаграмма распределения сотрудников по отделам
     """
-    global otdeli
+    otdeli = return_dict('Отделы')
     plt.bar(otdeli['Номер отдела'], otdeli['Количество сотрудников'])
     plt.title('Распределение сотрудников по отделам')
     plt.xticks([1, 2, 3])
@@ -65,7 +65,7 @@ def hist_salary():
     """
     Гистограмма распределения зарплат рабочих
     """
-    global workers
+    workers = return_dict('Работники')
     workers['З/П в месяц'].hist()
     plt.title('Распределение зарплат рабочих')
     plt.show()
@@ -75,7 +75,7 @@ def hist_birth_workers():
     """
     Гистограмма распределения рабочих по годам рождения
     """
-    global workers
+    workers = return_dict('Работники')
     workers['Дата рождения'].hist()
     plt.title('Распределение рабочих по годам рождения')
     plt.show()
@@ -85,7 +85,7 @@ def hist_birth_children():
     """
     Гистограмма распределения детей по годам рождения
     """
-    global children
+    children = return_dict('Дети работников')
     children['Дата рождения ребенка'].hist()
     plt.title('Распределение детей по годам рождения')
     plt.show()
