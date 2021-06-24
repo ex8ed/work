@@ -220,7 +220,7 @@ def one_attr_search_filter(content):
     filt = tk.StringVar()
     val = tk.StringVar()
 
-    label = tk.Label(content, text='Вывод текстового отчета по одному атрибуту с одним ключом')
+    label = tk.Label(content, text='Вывод текстового отчета по атрибутам с одним ключом')
     df_label = tk.Label(content, text='Справочник')
     attr_label = tk.Label(content, text='Атрибут')
     filt_label = tk.Label(content, text='Атрибут, по которому будет отбор')
@@ -273,7 +273,7 @@ def many_attr_search_filter(content):
     filt = tk.StringVar()
     val = tk.StringVar()
 
-    label = tk.Label(content, text='Вывод текстового отчета по нескольким атрибутам, с несколькими ключами')
+    label = tk.Label(content, text='Вывод текстового отчета по атрибутам, с несколькими ключами')
     df_label = tk.Label(content, text='Справочник')
     attr_label = tk.Label(content, text='Атрибуты (писать через запятую)')
     filt_label = tk.Label(content, text='Атрибуты, по которым будет отбор')

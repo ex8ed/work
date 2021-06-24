@@ -80,7 +80,7 @@ file.add_command(label='Завершить работу', command=lambda: end(rt
 # Создание пункта меню "Текстовые отчеты"
 text_report = tk.Menu(main_menu, tearoff=0)
 text_report.add_command(label='Отчет по одному атрибуту', command=lambda: one_attr_search(fr))
-text_report.add_command(label='Отчет по одному атрибуту по одному ключу',
+text_report.add_command(label='Отчет по множеству атрибутов по одному ключу',
                         command=lambda: one_attr_search_filter(fr))
 text_report.add_command(label='Отчет по множеству атрибутов', command=lambda: many_attr_search(fr))
 text_report.add_command(label='Отчет по множеству атрибутов по двум ключам',
