@@ -92,7 +92,7 @@ def hist_birth_children():
 
 
 def make_plot(dictionary, graph_type, num):
-    '''
+    """
     Расчеты графиков
 
     Parameters
@@ -107,7 +107,7 @@ def make_plot(dictionary, graph_type, num):
     -------
     None.
 
-    '''
+    """
     if dictionary == 'Работники':
         if graph_type == 'Гистограмма':
             if num == 'Гистограмма распределения рабочих по годам рождения':

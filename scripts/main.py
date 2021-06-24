@@ -50,9 +50,9 @@ changing_row.add_command(label='Изменить или удалить запи�
 
 
 show_dict = tk.Menu(main_menu, tearoff=0)
-show_dict.add_command(label='Словарь рабочих', command=lambda: show_dict_workers(rt, fr))
-show_dict.add_command(label='Словарь детей рабочих', command=lambda: show_dict_children(rt, fr))
-show_dict.add_command(label='Словарь отделений', command=lambda: show_dict_deps(rt, fr))
+show_dict.add_command(label='Словарь рабочих', command=lambda: show_dict_workers(fr))
+show_dict.add_command(label='Словарь детей рабочих', command=lambda: show_dict_children(fr))
+show_dict.add_command(label='Словарь отделений', command=lambda: show_dict_deps(fr))
 
 
 # Создание каскада для пункта меню "Нормализованные словари"

@@ -145,7 +145,7 @@ def one_attr_search(content):
     attr_entry = ttk.Entry(content, textvariable=attr, width=50)
     button = tk.Button(content, text='Вывести',
                        command=lambda: create_otchet_window(t, back_attr(df_combobox.get(),
-                                                                             attr_entry.get())))
+                                                                         attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
@@ -186,7 +186,7 @@ def many_attr_search(content):
 
     button = tk.Button(content, text='Вывести',
                        command=lambda: create_otchet_window(t, back_named_col(df_combobox.get(),
-                                                                                  attr_entry.get())))
+                                                                              attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
@@ -233,9 +233,9 @@ def one_attr_search_filter(content):
 
     button = tk.Button(content, text='Вывести',
                        command=lambda: create_otchet_window(t, back_names_cond(df_combobox.get(),
-                                                                                   attr_entry.get(),
-                                                                                   filt_entry.get(),
-                                                                                   val_entry.get())))
+                                                                               attr_entry.get(),
+                                                                               filt_entry.get(),
+                                                                               val_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
@@ -286,9 +286,9 @@ def many_attr_search_filter(content):
 
     button = tk.Button(content, text='Вывести',
                        command=lambda: create_otchet_window(t, back_many_cond(df_combobox.get(),
-                                                                                  attr_entry.get(),
-                                                                                  filt_entry.get(),
-                                                                                  val_entry.get())))
+                                                                              attr_entry.get(),
+                                                                              filt_entry.get(),
+                                                                              val_entry.get())))
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
     label.grid(column=0, row=0)
     df_label.grid(column=0, row=1)
@@ -310,7 +310,6 @@ def many_attr_search_filter(content):
 def back_graph_rep(content):
     """
     Функция для составления графических отчетов
-    :param rt:
     :param content:
     :return:
     """
@@ -377,7 +376,6 @@ def back_graph_rep(content):
 def show_dict_workers(content):
     """
     Функция для работы со словарями справочника workers
-    :param rt:
     :param content:
     :return:
     """
@@ -402,7 +400,6 @@ def show_dict_workers(content):
 def show_dict_children(content):
     """
     Функция для работы со словарями справочника children
-    :param rt:
     :param content:
     :return:
     """
@@ -427,7 +424,6 @@ def show_dict_children(content):
 def show_dict_deps(content):
     """
     Функция для работы со словарями справочника otdeli
-    :param rt:
     :param content:
     :return:
     """
@@ -545,7 +541,7 @@ def show_workers_entry(content, index, db):
                                                     prof_entry.get(), pay_entry.get()))
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_workers(index))
-    return_back = tk.Button(content, text='Назад', width=20, \
+    return_back = tk.Button(content, text='Назад', width=20,
                             command=lambda: change_row(content, 'Работники'))
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -600,7 +596,7 @@ def show_children_entry(content, index, db):
                                                      garden_entry.get()))
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_children(index))
-    return_back = tk.Button(content, text='Назад', width=20, \
+    return_back = tk.Button(content, text='Назад', width=20,
                             command=lambda: change_row(content, 'Дети работников'))
 
     content.grid(column=0, row=0)
@@ -651,7 +647,7 @@ def show_otdeli_entry(content, index, db):
                                                    tel_entry.get(), num_workers_entry.get()))
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_otdeli(index))
-    return_back = tk.Button(content, text='Назад', width=20, \
+    return_back = tk.Button(content, text='Назад', width=20,
                             command=lambda: change_row(content, 'Отделы'))
 
     content.grid(column=0, row=0)
@@ -669,27 +665,28 @@ def show_otdeli_entry(content, index, db):
 
 
 def show_info(content):
-    '''
+    """
     Создание окна с информацией о приложении
-    '''
+    """
     for widget in content.winfo_children():
         widget.destroy()
-        
+
     text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
-    
+
     content.grid(column=0, row=0)
     text.grid(column=0, row=0)
     text.insert(1.0, load_info_text())
-    
+
+
 def show_help(content):
-    '''
+    """
     Создание окна со справкой о работе приложения
-    '''
+    """
     for widget in content.winfo_children():
         widget.destroy()
-        
+
     text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
-    
+
     content.grid(column=0, row=0)
     text.grid(column=0, row=0)
     text.insert(1.0, load_help_text())

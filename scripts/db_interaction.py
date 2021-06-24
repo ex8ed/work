@@ -31,43 +31,43 @@ def init_db():
 
         
 def load_default_text():
-    '''
+    """
     Returns
     -------
     default_text : str
     Загрузка текста для начального экрана
-    '''
-    with open('d:/work.project/work/data/default_text.txt', 'r', encoding='utf-8') as f:
+    """
+    with open('./data/default_text.txt', 'r', encoding='utf-8') as f:
         default_text = f.read()
     return default_text
 
 
 def load_info_text():
-    '''
+    """
     Returns
     -------
     info_text : str
     Загрузка текста с информацией о приложении
-    '''
-    with open('d:/work.project/work/data/info_text.txt', 'r', encoding='utf-8') as f:
+    """
+    with open('./data/info_text.txt', 'r', encoding='utf-8') as f:
         info_text = f.read()
     return info_text
 
 
 def load_help_text():
-    '''
+    """
     Returns
     -------
     help_text : str
     Загрузка текста со справкой по работе с приложением
-    '''
-    with open('d:/work.project/work/data/help_text.txt', 'r', encoding='utf-8') as f:
+    """
+    with open('./data/help_text.txt', 'r', encoding='utf-8') as f:
         help_text = f.read()
     return help_text
 
 
 def end(root):
-    '''
+    """
     Функция закрытия главного окна
     
     Parameters
@@ -76,12 +76,12 @@ def end(root):
     Returns
     -------
     None.
-    '''
+    """
     root.destroy()
 
 
 def return_dict(dict_name):
-    '''
+    """
     Parameters
     ----------
     dict_name : str
@@ -90,7 +90,7 @@ def return_dict(dict_name):
     -------
     TYPE pandas.dataframe либо None
         Возвращает соотвествующий справочник либо None если было введено некорректное название
-    '''
+    """
     if dict_name == 'Работники':
         return workers
     elif dict_name == 'Дети работников':
@@ -298,7 +298,7 @@ def back_many_cond(dict_name, names, by_names: str, conditions: str):
 
 
 def remove_workers(index):
-    '''
+    """
     Функция удаления записи из справочника workers
 
     Parameters
@@ -307,14 +307,14 @@ def remove_workers(index):
     Returns
     -------
     None.
-    '''
+    """
     global workers
     workers = workers.drop(int(index)).reset_index(drop=True)
     save()
 
 
 def remove_children(index):
-    '''
+    """
     Функция удаления записи из справочника children
 
     Parameters
@@ -323,14 +323,14 @@ def remove_children(index):
     Returns
     -------
     None.
-    '''
+    """
     global children
     children = children.drop(int(index)).reset_index(drop=True)
     save()
 
 
 def remove_otdeli(index):
-    '''
+    """
     Функция удаления записи из справочника otdeli
 
     Parameters
@@ -339,14 +339,14 @@ def remove_otdeli(index):
     Returns
     -------
     None.
-    '''
+    """
     global otdeli
     otdeli = otdeli.drop(int(index)).reset_index(drop=True)
     save()
 
 
 def save_workers(index, fio, birth, child, vac, dep, prof, pay):
-    '''
+    """
     Функция добавления новой записи в справочник workers
 
     Parameters
@@ -364,7 +364,7 @@ def save_workers(index, fio, birth, child, vac, dep, prof, pay):
     -------
     None.
 
-    '''
+    """
     global workers
     workers.loc[int(index), 'ФИО'] = fio
     workers.loc[int(index), 'Дата рождения'] = birth
@@ -377,7 +377,7 @@ def save_workers(index, fio, birth, child, vac, dep, prof, pay):
 
 
 def save_children(index, fio, birth, garden):
-    '''
+    """
     Функция добавления новой записи в справочник children
 
     Parameters
@@ -391,7 +391,7 @@ def save_children(index, fio, birth, garden):
     -------
     None.
 
-    '''
+    """
     global children
     children.loc[int(index), 'ФИО Ребенка'] = fio
     children.loc[int(index), 'Дата рождения ребенка'] = birth
@@ -400,7 +400,7 @@ def save_children(index, fio, birth, garden):
 
 
 def save_otdeli(index, num, date, tel, num_workers):
-    '''
+    """
     Функция добавления новой записи в справочник otdeli
 
     Parameters
@@ -415,7 +415,7 @@ def save_otdeli(index, num, date, tel, num_workers):
     -------
     None.
 
-    '''
+    """
     global otdeli
     otdeli.loc[int(index), 'Номер отдела'] = num
     otdeli.loc[int(index), 'Дата создания'] = date
