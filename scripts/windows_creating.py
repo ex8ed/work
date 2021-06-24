@@ -35,13 +35,8 @@ def add_workers_row(rt, content):
     prof_entry = ttk.Entry(content, width=40)
     pay_entry = ttk.Entry(content, width=40)
     add = tk.Button(content, text='Добавить запись', width=20,
-<<<<<<< HEAD
                     command=lambda: adding_to_workers(fio_entry.get(), birth_entry.get(), child_entry.get(),
                     vac_entry.get(), dep_entry.get(), prof_entry.get(), pay_entry.get()))
-=======
-                    command=lambda: adding_to_workers(*attr_list))
-    update = tk.Button(content, text='Обновить запись', width=20, command=save)
->>>>>>> 5bb70474800b02bde6a4d6d972090a489e73c12a
     df = get_workers()
 
     content.grid(column=0, row=0)
@@ -114,11 +109,6 @@ def add_otdeli_row(rt, content):
     add = tk.Button(content, text='Добавить запись', width=20,
                     command=lambda: adding_to_otdeli(num_entry.get(), date_entry.get(),
                                                      tel_entry.get(), num_workers_entry.get()))
-<<<<<<< HEAD
-=======
-    update = tk.Button(content, text='Обновить запись', width=20, command=save)
-    delete = tk.Button(content, text='Удалить запись', width=20, command=deleting)
->>>>>>> 5bb70474800b02bde6a4d6d972090a489e73c12a
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
