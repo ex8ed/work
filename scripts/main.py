@@ -11,6 +11,7 @@ from windows_creating import add_workers_row, add_children_row, \
     many_attr_search_filter, back_graph_rep, show_dict_workers, \
     show_dict_children, show_dict_deps, change_row
 
+# объявление рабочей директории
 PTH = os.getcwd()
 os.chdir(PTH[:len(PTH) - 8])
 
