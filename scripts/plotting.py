@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 from db_interaction import return_dict
+
+"""
+Модуль, отвечающий за построение графиков.
+"""
 
 
 def scatter():
@@ -16,7 +21,7 @@ def scatter():
 
 def bar_covid():
     """
-    Столбчатая диаграмма вакцинированных и невакцинированных от COVID-19
+    Столбчатая диаграмма вакцинированных и не вакцинированных от COVID-19
     """
     workers = return_dict('Работники')
     vaccinated = workers[workers['Прививка от COVID-19'] == 'Да'].shape[0]
@@ -101,12 +106,8 @@ def make_plot(dictionary, graph_type, num):
         Название справочника
     graph_type : str
         Тип графика
-    num : int
-
-    Returns
-    -------
-    None.
-
+    num : str
+        Выбранный график для указанного случая.
     """
     if dictionary == 'Работники':
         if graph_type == 'Гистограмма':
