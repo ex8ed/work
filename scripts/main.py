@@ -52,10 +52,10 @@ file.add_command(label='Завершить работу', command=lambda: end(rt
 
 text_report = tk.Menu(mainmenu, tearoff=0)
 text_report.add_command(label='Отчет по одному атрибуту', command=lambda: one_attr_search(rt, fr))
-text_report.add_command(label='Отчет по одному атрибуту по одному ключу',
+text_report.add_command(label='Отчет по одному атрибуту по одному ключу',\
                         command=lambda: one_attr_search_filter(rt, fr))
 text_report.add_command(label='Отчет по множеству атрибутов', command=lambda: many_attr_search(rt, fr))
-text_report.add_command(label='Отчет по множеству атрибутов по нескольким ключам',
+text_report.add_command(label='Отчет по множеству атрибутов по двум ключам',\
                         command=lambda: many_attr_search_filter(rt, fr))
 
 cfg = tk.Menu(mainmenu, tearoff=0)

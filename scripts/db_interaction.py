@@ -7,8 +7,6 @@
 import os
 import pandas as pd
 from tkinter import messagebox
-import matplotlib.pyplot as plt
-from tkinter import filedialog as fld
 from checking import chars, numerical, phone_number, data
 
 def init_db():
@@ -50,6 +48,8 @@ def return_dict(dict_name):
         return children
     elif dict_name == 'Отделы':
         return otdeli
+    else:
+        return None
 
 def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     """
@@ -64,11 +64,8 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     :return:
     """
     global workers
-    print(fio)
-    if False in [chars(fio), data(birth), chars(child), chars(vac), numerical(dep),
+    if False in [chars(fio), data(birth), chars(child), chars(vac), numerical(dep),\
                  numerical(pay)]:
-        print([chars(fio), data(birth), chars(child), chars(vac), numerical(dep),
-               numerical(pay)])
         messagebox.showerror("Error", "Данные введены некорректно!")
         return False
     else:
@@ -86,7 +83,6 @@ def adding_to_children(fio, birth_ch, k_gard):
     :return:
     """
     global children
-    print([chars(fio),data(birth_ch), numerical(k_gard)])
     if False in [chars(fio), data(birth_ch), numerical(k_gard)]:
         messagebox.showerror("Error", "Данные введены некорректно!")
         return False
@@ -154,7 +150,11 @@ def back_attr(dict_name, name):
     :return: Объект DataFrame
     """
     try:
-        return return_dict(dict_name)[[name]]
+        db = return_dict(dict_name)[[name]]
+        if db != None:
+            return db
+        else:
+            messagebox.showerror("Error", "Вызываемого справочника не существует")
     except KeyError:
         messagebox.showerror("Error", "Вызываемого поля не существует")
 
@@ -168,7 +168,11 @@ def back_named_col(dict_name, names):
     :return: Множество полей в объекте DataFrame
     """
     try:
-        return return_dict(dict_name)[[s.strip() for s in names.split(',')]]
+        db = return_dict(dict_name)[[s.strip() for s in names.split(',')]]
+        if db != None:
+            return db
+        else:
+            messagebox.showerror("Error", "Вызываемого справочника не существует")
     except KeyError:
         messagebox.showerror("Error", "Вызываемого поля не существует")
 
@@ -183,11 +187,12 @@ def back_names_cond(dict_name, names, by_name, condition):
     :param condition: условие для проверки по объекту by_name
     :return: набор атрибутов в объекте DataFrame
     """
-    db = return_dict(dict_name)
     try:
         db = return_dict(dict_name)
         return db.loc[db[by_name] == int(condition),
                       [s.strip() for s in names.split(',')]]
+    except AttributeError:
+        messagebox.showerror("Error", "Вызываемого справочника не существует")
     except ValueError:
         return db.loc[db[by_name] == condition,
                       [s.strip() for s in names.split(',')]]
@@ -207,22 +212,25 @@ def back_many_cond(dict_name, names, by_names: str, conditions: str):
     :return:
     """
     db = return_dict(dict_name)
-    cond = [s.strip() for s in conditions.split(',')]
-    b_n = [s.strip() for s in by_names.split(',')]
-    # Проверка на числовые параметры
-    try:
-        cond0 = db[b_n[0]] == int(cond[0])
-    except ValueError:
-        cond0 = db[b_n[0]] == cond[0]
-
-    try:
-        cond1 = db[b_n[1]] == int(cond[1])
-    except ValueError:
-        cond1 = db[b_n[1]] == cond[1]
-    try:
-        return db.loc[cond0 & cond1, [s.strip() for s in names.split(',')]]
-    except KeyError:
-        messagebox.showerror("Error", "Вызываемого поля не существует")
+    if db != None:
+        cond = [s.strip() for s in conditions.split(',')]
+        b_n = [s.strip() for s in by_names.split(',')]
+        # Проверка на числовые параметры
+        try:
+            cond0 = db[b_n[0]] == int(cond[0])
+        except ValueError:
+            cond0 = db[b_n[0]] == cond[0]
+    
+        try:
+            cond1 = db[b_n[1]] == int(cond[1])
+        except ValueError:
+            cond1 = db[b_n[1]] == cond[1]
+        try:
+            return db.loc[cond0 & cond1, [s.strip() for s in names.split(',')]]
+        except KeyError:
+            messagebox.showerror("Error", "Вызываемого поля не существует")
+    else:
+        messagebox.showerror("Error", "Вызываемого справочника не существует")
 
 def remove_workers(index):
     global workers
