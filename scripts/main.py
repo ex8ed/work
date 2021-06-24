@@ -33,11 +33,11 @@ add_row.add_command(label='Добавить запись в справочник
 
 changing_row = tk.Menu(mainmenu, tearoff=0)
 changing_row.add_command(label='Изменить или удалить запись в справочнике Workers',
-                    command=lambda: change_row(rt, fr, 'workers'))
+                    command=lambda: change_row(rt, fr, 'Работники'))
 changing_row.add_command(label='Изменить или удалить запись в справочнике Children',
-                    command=lambda: change_row(rt, fr, 'children'))
+                    command=lambda: change_row(rt, fr, 'Дети работников'))
 changing_row.add_command(label='Изменить или удалить запись в справочнике Otdeli',
-                    command=lambda: change_row(rt, fr, 'otdeli'))
+                    command=lambda: change_row(rt, fr, 'Отделы'))
 
 show_dict = tk.Menu(mainmenu, tearoff=0)
 show_dict.add_command(label='Словарь рабочих', command=lambda: show_dict_workers(rt, fr))

@@ -26,7 +26,6 @@ def init_db():
     children = pd.read_pickle('../data/children.pic')
     otdeli = pd.read_pickle('../data/otdeli.pic')
 
-
 def get_workers():
     return workers
 
@@ -54,16 +53,6 @@ def return_dict(dict_name):
     elif dict_name == 'Отделы':
         return otdeli
 
-
-def return_path(dict_name):
-    if dict_name == 'Работники':
-        return './data/workers.pic'
-    elif dict_name == 'Дети работников':
-        return './data/children.pic'
-    elif dict_name == 'Отделы':
-        return './data/otdeli.pic'
-
-
 def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     """
     Добавляет строку в справочник workers
@@ -86,6 +75,7 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
         return False
     else:
         workers.loc[workers.index.max() + 1] = [fio, birth, child, vac, dep, prof, pay]
+        save()
         return False
 
 
@@ -104,6 +94,7 @@ def adding_to_children(fio, birth_ch, k_gard):
         return False
     else:
         children.loc[children.index.max() + 1] = [fio, birth_ch, k_gard]
+        save()
 
 
 def adding_to_otdeli(num, date, tel, num_workers):
@@ -121,6 +112,7 @@ def adding_to_otdeli(num, date, tel, num_workers):
         return False
     else:
         otdeli.loc[otdeli.index.max() + 1] = [num, date, tel, num_workers]
+        save()
 
 
 def deleting(dict_name, index):
@@ -150,9 +142,6 @@ def save():
     global children
     global otdeli
     path = os.getcwd()
-    workers.to_pickle(path + '/data/workers.pic')
-    children.to_pickle(path + '/data/children.pic')
-    otdeli.to_pickle(path + '/data/otdeli.pic')
     return 0
 
 
@@ -234,5 +223,46 @@ def back_many_cond(dict_name, names, by_names: str, conditions: str):
     except KeyError:
         messagebox.showerror("Error", "Вызываемого поля не существует")
 
-#FIX ME!
+def remove_workers(index):
+    global workers
+    workers = workers.drop(int(index)).reset_index(drop=True)
+    save()
+
+def remove_children(index):
+    global children
+    children = children.drop(int(index)).reset_index(drop=True)
+    save()
+
+def remove_otdeli(index):
+    global otdeli
+    otdeli = otdeli.drop(int(index)).reset_index(drop=True)
+    save()
+
+def save_workers(index, fio, birth, child, vac, dep, prof, pay):
+    global workers
+    workers.loc[int(index), 'ФИО'] = fio
+    workers.loc[int(index), 'Дата рождения'] = birth
+    workers.loc[int(index), 'ФИО Ребенка'] = child
+    workers.loc[int(index), 'Прививка от COVID-19'] = vac
+    workers.loc[int(index), 'Номер отдела'] = dep
+    workers.loc[int(index), 'Должность'] = prof
+    workers.loc[int(index), 'З/П в месяц'] = pay
+    save()
+
+def save_children(index, fio, birth, garden):
+    global children
+    children.loc[int(index), 'ФИО Ребенка'] = fio
+    children.loc[int(index), 'Дата рождения ребенка'] = birth
+    children.loc[int(index), 'Номер садика'] = garden
+    save()
+
+def save_otdeli(index, num, date, tel, num_workers):
+    global otdeli
+    otdeli.loc[int(index), 'Номер отдела'] = num
+    otdeli.loc[int(index), 'Дата создания'] = date
+    otdeli.loc[int(index), 'Телефон'] = tel
+    otdeli.loc[int(index), 'Количество сотрудников'] = num_workers
+    save()
+
+#FIX ME! 
 init_db()
