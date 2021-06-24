@@ -8,6 +8,8 @@ import os
 import pandas as pd
 from tkinter import messagebox
 from checking import chars, numerical, phone_number, data
+import datetime
+
 
 global children
 global otdeli
@@ -58,6 +60,19 @@ def return_dict(dict_name):
         return None
 
 
+def data_transfer(data_):
+    """
+        Функция приводит строку с указанной датой
+    к временному типу.
+    :param data_: строка
+    :return: дата в формате datetime
+    """
+    d_t = data_.split('.')
+    d_t.reverse()
+    data_list = map(int, d_t)
+    return datetime.datetime(*data_list)
+
+
 def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
     """
     Добавляет строку в справочник workers
@@ -76,7 +91,8 @@ def adding_to_workers(fio, birth, child, vac, dep, prof, pay):
         messagebox.showerror("Error", "Данные введены некорректно")
         return False
     else:
-        workers.loc[workers.index.max() + 1] = [fio, birth, child, vac, dep, prof, pay]
+        workers.loc[workers.index.max() + 1] = [fio, data_transfer(birth),
+                                                child, vac, dep, prof, pay]
         save()
         messagebox.showinfo("Info", "Поле успешно добавлено")
 
@@ -94,7 +110,7 @@ def adding_to_children(fio, birth_ch, k_gard):
         messagebox.showerror("Error", "Данные введены некорректно!")
         return False
     else:
-        children.loc[children.index.max() + 1] = [fio, birth_ch, k_gard]
+        children.loc[children.index.max() + 1] = [fio, data_transfer(birth_ch), k_gard]
         save()
         messagebox.showinfo("Info", "Поле успешно добавлено")
 
@@ -113,7 +129,8 @@ def adding_to_otdeli(num, date, tel, num_workers):
         messagebox.showerror("Error", "Неверный формат данных")
         return False
     else:
-        otdeli.loc[otdeli.index.max() + 1] = [num, date, tel, num_workers]
+        otdeli.loc[otdeli.index.max() + 1] = [num,
+                                              data_transfer(date), tel, num_workers]
         save()
         messagebox.showinfo("Info", "Поле успешно добавлено")
 
@@ -286,5 +303,4 @@ def save_otdeli(index, num, date, tel, num_workers):
     save()
 
 
-# FIX ME!
 init_db()
