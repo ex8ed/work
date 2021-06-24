@@ -15,7 +15,7 @@ PTH = os.getcwd()
 os.chdir(PTH[:len(PTH) - 8])
 
 rt = tk.Tk()
-rt.geometry('1280x720')
+rt.geometry('980x600')
 rt.resizable(False, False)
 
 fr = ttk.Frame(rt)
