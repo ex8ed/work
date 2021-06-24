@@ -8,12 +8,12 @@ from tkinter import messagebox
 from db_interaction import adding_to_workers, adding_to_children, adding_to_otdeli, \
     back_attr, back_named_col, back_names_cond, back_many_cond, \
     return_dict, remove_workers, remove_children, remove_otdeli, \
-    save_workers, save_children, save_otdeli
+    save_workers, save_children, save_otdeli, load_info_text, load_help_text
 from checking import numerical
 from plotting import make_plot
 
 
-def add_workers_row(rt, content):
+def add_workers_row(content):
     """
     Создание окна для добавления записи в исходную базу данных
     """
@@ -59,7 +59,7 @@ def add_workers_row(rt, content):
     add.grid(column=3, row=9, columnspan=2)
 
 
-def add_children_row(rt, content):
+def add_children_row(content):
     """
     Создание окна для добавления записи в исходную базу данных
     """
@@ -89,7 +89,7 @@ def add_children_row(rt, content):
     add.grid(column=3, row=9, columnspan=2)
 
 
-def add_otdeli_row(rt, content):
+def add_otdeli_row(content):
     """
     Создание окна для добавления записи в исходную базу данных
     """
@@ -122,7 +122,7 @@ def add_otdeli_row(rt, content):
     add.grid(column=3, row=9, columnspan=2)
 
 
-def one_attr_search(rt, content):
+def one_attr_search(content):
     """
     Создание окна для поиска по одному атрибуту
     """
@@ -144,7 +144,7 @@ def one_attr_search(rt, content):
     df_combobox = ttk.Combobox(content, values=['Работники', 'Дети работников', 'Отделы'], width=50)
     attr_entry = ttk.Entry(content, textvariable=attr, width=50)
     button = tk.Button(content, text='Вывести',
-                       command=lambda: create_otchet_window(rt, t, back_attr(df_combobox.get(),
+                       command=lambda: create_otchet_window(t, back_attr(df_combobox.get(),
                                                                              attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
@@ -161,7 +161,7 @@ def one_attr_search(rt, content):
     content.grid_rowconfigure(0, weight=1)
 
 
-def many_attr_search(rt, content):
+def many_attr_search(content):
     """
     Создание окна для поиска по нескольким атрибутам
     """
@@ -185,7 +185,7 @@ def many_attr_search(rt, content):
     attr_entry = ttk.Entry(content, textvariable=attr, width=45)
 
     button = tk.Button(content, text='Вывести',
-                       command=lambda: create_otchet_window(rt, t, back_named_col(df_combobox.get(),
+                       command=lambda: create_otchet_window(t, back_named_col(df_combobox.get(),
                                                                                   attr_entry.get())))
 
     content.grid(column=0, row=0, columnspan=3, rowspan=8)
@@ -202,7 +202,7 @@ def many_attr_search(rt, content):
     content.grid_rowconfigure(0, weight=1)
 
 
-def one_attr_search_filter(rt, content):
+def one_attr_search_filter(content):
     """
     Создание окна для поиска по одному атрибуту и условию
     """
@@ -232,7 +232,7 @@ def one_attr_search_filter(rt, content):
     val_entry = ttk.Entry(content, textvariable=val, width=45)
 
     button = tk.Button(content, text='Вывести',
-                       command=lambda: create_otchet_window(rt, t, back_names_cond(df_combobox.get(),
+                       command=lambda: create_otchet_window(t, back_names_cond(df_combobox.get(),
                                                                                    attr_entry.get(),
                                                                                    filt_entry.get(),
                                                                                    val_entry.get())))
@@ -255,7 +255,7 @@ def one_attr_search_filter(rt, content):
     content.grid_rowconfigure(0, weight=1)
 
 
-def many_attr_search_filter(rt, content):
+def many_attr_search_filter(content):
     """
     Создание окна для поиска по нескольким атрибутам и условиям
     """
@@ -285,7 +285,7 @@ def many_attr_search_filter(rt, content):
     val_entry = ttk.Entry(content, textvariable=val, width=45)
 
     button = tk.Button(content, text='Вывести',
-                       command=lambda: create_otchet_window(rt, t, back_many_cond(df_combobox.get(),
+                       command=lambda: create_otchet_window(t, back_many_cond(df_combobox.get(),
                                                                                   attr_entry.get(),
                                                                                   filt_entry.get(),
                                                                                   val_entry.get())))
@@ -307,7 +307,7 @@ def many_attr_search_filter(rt, content):
     content.grid_rowconfigure(0, weight=1)
 
 
-def back_graph_rep(rt, content):
+def back_graph_rep(content):
     """
     Функция для составления графических отчетов
     :param rt:
@@ -374,7 +374,7 @@ def back_graph_rep(rt, content):
     button_2.grid(column=1, row=4)
 
 
-def show_dict_workers(rt, content):
+def show_dict_workers(content):
     """
     Функция для работы со словарями справочника workers
     :param rt:
@@ -399,7 +399,7 @@ def show_dict_workers(rt, content):
     text.insert(1.0, return_dict('Работники').to_string())
 
 
-def show_dict_children(rt, content):
+def show_dict_children(content):
     """
     Функция для работы со словарями справочника children
     :param rt:
@@ -424,7 +424,7 @@ def show_dict_children(rt, content):
     text.insert(1.0, return_dict('Дети работников').to_string())
 
 
-def show_dict_deps(rt, content):
+def show_dict_deps(content):
     """
     Функция для работы со словарями справочника otdeli
     :param rt:
@@ -449,7 +449,7 @@ def show_dict_deps(rt, content):
     text.insert(1.0, return_dict('Отделы').to_string())
 
 
-def create_otchet_window(root, text, df):
+def create_otchet_window(text, df):
     """
     Создание окна текстового отчета
     """
@@ -465,7 +465,7 @@ def create_otchet_window(root, text, df):
         pass
 
 
-def change_row(rt, content, db_name):
+def change_row(content, db_name):
     """
     Создание окна для поиска записи по индексу
     """
@@ -476,7 +476,7 @@ def change_row(rt, content, db_name):
     num_label = tk.Label(content, text='Введите индекс: ')
     index_entry = ttk.Entry(content, width=40)
     get_entry = tk.Button(content, text='Получить запись', width=20,
-                          command=lambda: show_entry(rt, content, index_entry.get(), db_name))
+                          command=lambda: show_entry(content, index_entry.get(), db_name))
     content.grid(column=0, row=0)
     label.grid(column=0, row=0)
     num_label.grid(column=0, row=1)
@@ -484,23 +484,23 @@ def change_row(rt, content, db_name):
     get_entry.grid(column=3, row=1)
 
 
-def show_entry(rt, content, index, db_name):
+def show_entry(content, index, db_name):
     """
     Создание окна для мзменения или удаления записи
     """
     db = return_dict(db_name)
     if numerical(index):
         if db_name == 'Работники':
-            show_workers_entry(rt, content, int(index), db)
+            show_workers_entry(content, int(index), db)
         elif db_name == 'Дети работников':
-            show_children_entry(rt, content, int(index), db)
+            show_children_entry(content, int(index), db)
         elif db_name == 'Отделы':
-            show_otdeli_entry(rt, content, int(index), db)
+            show_otdeli_entry(content, int(index), db)
     else:
         tk.messagebox.showerror('Ошибка', 'Введенный индекс записи не является числом')
 
 
-def show_workers_entry(rt, content, index, db):
+def show_workers_entry(content, index, db):
     """
     Создание окна для изменения или удаления записи в справочнике workers
     """
@@ -511,7 +511,7 @@ def show_workers_entry(rt, content, index, db):
         fio, birth, child, vac, dep, prof, pay = db.loc[index, :]
     else:
         tk.messagebox.showerror('Ошибка', 'Записи с данным индексом не существует',
-                                command=change_row(rt, content, 'Работники'))
+                                command=change_row(content, 'Работники'))
         return 0
 
     label = tk.Label(content, text='Запись под индексом {}'.format(index))
@@ -546,7 +546,7 @@ def show_workers_entry(rt, content, index, db):
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_workers(index))
     return_back = tk.Button(content, text='Назад', width=20, \
-                            command=lambda: change_row(rt, content, 'Работники'))
+                            command=lambda: change_row(content, 'Работники'))
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
     fio_label.grid(column=0, row=1)
@@ -568,7 +568,7 @@ def show_workers_entry(rt, content, index, db):
     return_back.grid(column=4, row=9, columnspan=2)
 
 
-def show_children_entry(rt, content, index, db):
+def show_children_entry(content, index, db):
     """
     Создание окна для изменения или удаления записи в справочнике children
     """
@@ -579,7 +579,7 @@ def show_children_entry(rt, content, index, db):
         fio, birth, garden = db.loc[index, :]
     else:
         tk.messagebox.showerror('Ошибка', 'Записи с данным индексом не существует',
-                                command=change_row(rt, content, 'Дети работников'))
+                                command=change_row(content, 'Дети работников'))
         return 0
 
     label = tk.Label(content, text='Добавление, редактирование и удаление записей')
@@ -601,7 +601,7 @@ def show_children_entry(rt, content, index, db):
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_children(index))
     return_back = tk.Button(content, text='Назад', width=20, \
-                            command=lambda: change_row(rt, content, 'Дети работников'))
+                            command=lambda: change_row(content, 'Дети работников'))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -616,7 +616,7 @@ def show_children_entry(rt, content, index, db):
     return_back.grid(column=4, row=9, columnspan=2)
 
 
-def show_otdeli_entry(rt, content, index, db):
+def show_otdeli_entry(content, index, db):
     """
     Создание окна для изменения или удаления записи в справочнике otdeli
     """
@@ -628,7 +628,7 @@ def show_otdeli_entry(rt, content, index, db):
         num, date, tel, num_workers = db.loc[index, :]
     else:
         tk.messagebox.showerror('Ошибка', 'Записи с данным индексом не существует',
-                                command=change_row(rt, content, 'Отделы'))
+                                command=change_row(content, 'Отделы'))
         return 0
 
     label = tk.Label(content, text='Добавление, редактирование и удаление записей')
@@ -652,7 +652,7 @@ def show_otdeli_entry(rt, content, index, db):
     removing = tk.Button(content, text='Удалить запись', width=20,
                          command=lambda: remove_otdeli(index))
     return_back = tk.Button(content, text='Назад', width=20, \
-                            command=lambda: change_row(rt, content, 'Отделы'))
+                            command=lambda: change_row(content, 'Отделы'))
 
     content.grid(column=0, row=0)
     label.grid(column=0, row=0, columnspan=3)
@@ -666,3 +666,30 @@ def show_otdeli_entry(rt, content, index, db):
     saving.grid(column=0, row=9, columnspan=2)
     removing.grid(column=2, row=9, columnspan=2)
     return_back.grid(column=4, row=9, columnspan=2)
+
+
+def show_info(content):
+    '''
+    Создание окна с информацией о приложении
+    '''
+    for widget in content.winfo_children():
+        widget.destroy()
+        
+    text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
+    
+    content.grid(column=0, row=0)
+    text.grid(column=0, row=0)
+    text.insert(1.0, load_info_text())
+    
+def show_help(content):
+    '''
+    Создание окна со справкой о работе приложения
+    '''
+    for widget in content.winfo_children():
+        widget.destroy()
+        
+    text = tk.Text(content, width=120, height=30, wrap=tk.NONE)
+    
+    content.grid(column=0, row=0)
+    text.grid(column=0, row=0)
+    text.insert(1.0, load_help_text())

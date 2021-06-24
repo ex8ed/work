@@ -29,27 +29,68 @@ def init_db():
     children = pd.read_pickle('../data/children.pic')
     otdeli = pd.read_pickle('../data/otdeli.pic')
 
+        
+def load_default_text():
+    '''
+    Returns
+    -------
+    default_text : str
+    Загрузка текста для начального экрана
+    '''
+    with open('d:/work.project/work/data/default_text.txt', 'r', encoding='utf-8') as f:
+        default_text = f.read()
+    return default_text
 
-def get_workers():
-    return workers
+
+def load_info_text():
+    '''
+    Returns
+    -------
+    info_text : str
+    Загрузка текста с информацией о приложении
+    '''
+    with open('d:/work.project/work/data/info_text.txt', 'r', encoding='utf-8') as f:
+        info_text = f.read()
+    return info_text
 
 
-def get_children():
-    return children
-
-
-def get_deps():
-    return otdeli
+def load_help_text():
+    '''
+    Returns
+    -------
+    help_text : str
+    Загрузка текста со справкой по работе с приложением
+    '''
+    with open('d:/work.project/work/data/help_text.txt', 'r', encoding='utf-8') as f:
+        help_text = f.read()
+    return help_text
 
 
 def end(root):
+    '''
+    Функция закрытия главного окна
+    
+    Parameters
+    ----------
+    root : tkinter.root
+    Returns
+    -------
+    None.
+    '''
     root.destroy()
 
 
 def return_dict(dict_name):
-    global children
-    global otdeli
-    global workers
+    '''
+    Parameters
+    ----------
+    dict_name : str
+        Название справочника
+    Returns
+    -------
+    TYPE pandas.dataframe либо None
+        Возвращает соотвествующий справочник либо None если было введено некорректное название
+    '''
     if dict_name == 'Работники':
         return workers
     elif dict_name == 'Дети работников':
@@ -257,24 +298,73 @@ def back_many_cond(dict_name, names, by_names: str, conditions: str):
 
 
 def remove_workers(index):
+    '''
+    Функция удаления записи из справочника workers
+
+    Parameters
+    ----------
+    index : int
+    Returns
+    -------
+    None.
+    '''
     global workers
     workers = workers.drop(int(index)).reset_index(drop=True)
     save()
 
 
 def remove_children(index):
+    '''
+    Функция удаления записи из справочника children
+
+    Parameters
+    ----------
+    index : int
+    Returns
+    -------
+    None.
+    '''
     global children
     children = children.drop(int(index)).reset_index(drop=True)
     save()
 
 
 def remove_otdeli(index):
+    '''
+    Функция удаления записи из справочника otdeli
+
+    Parameters
+    ----------
+    index : int
+    Returns
+    -------
+    None.
+    '''
     global otdeli
     otdeli = otdeli.drop(int(index)).reset_index(drop=True)
     save()
 
 
 def save_workers(index, fio, birth, child, vac, dep, prof, pay):
+    '''
+    Функция добавления новой записи в справочник workers
+
+    Parameters
+    ----------
+    index : int
+    fio : str
+    birth : str
+    child : str
+    vac : str
+    dep : str
+    prof : str
+    pay : str
+
+    Returns
+    -------
+    None.
+
+    '''
     global workers
     workers.loc[int(index), 'ФИО'] = fio
     workers.loc[int(index), 'Дата рождения'] = birth
@@ -287,6 +377,21 @@ def save_workers(index, fio, birth, child, vac, dep, prof, pay):
 
 
 def save_children(index, fio, birth, garden):
+    '''
+    Функция добавления новой записи в справочник children
+
+    Parameters
+    ----------
+    index : int.
+    fio : str
+    birth : str
+    garden : str
+
+    Returns
+    -------
+    None.
+
+    '''
     global children
     children.loc[int(index), 'ФИО Ребенка'] = fio
     children.loc[int(index), 'Дата рождения ребенка'] = birth
@@ -295,6 +400,22 @@ def save_children(index, fio, birth, garden):
 
 
 def save_otdeli(index, num, date, tel, num_workers):
+    '''
+    Функция добавления новой записи в справочник otdeli
+
+    Parameters
+    ----------
+    index : int
+    num : str
+    date : str
+    tel : str
+    num_workers : str
+
+    Returns
+    -------
+    None.
+
+    '''
     global otdeli
     otdeli.loc[int(index), 'Номер отдела'] = num
     otdeli.loc[int(index), 'Дата создания'] = date

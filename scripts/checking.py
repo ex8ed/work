@@ -21,7 +21,9 @@ def phone_number(number):
     :param number: данный номер телефона
     :return: Логическая константа-ответ.
     """
+
     if len(number.replace('-', '')) >= 12:
+
         try:
             int(number.replace('-', ''))
             return True
