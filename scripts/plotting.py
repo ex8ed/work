@@ -48,6 +48,7 @@ def bar_otdel_salary():
     Столбчатая диаграмма средней зп по отделам
     """
     workers = return_dict('Работники')
+    workers['З/П в месяц'] = workers['З/П в месяц'].apply(int)
     workers_aggregated = workers.groupby('Номер отдела').agg({'З/П в месяц': 'mean'}).reset_index()
     plt.bar(workers_aggregated['Номер отдела'], workers_aggregated['З/П в месяц'])
     plt.xticks([1, 2, 3])
