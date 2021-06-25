@@ -49,19 +49,6 @@ changing_row.add_command(label='Изменить или удалить запи�
                          command=lambda: change_row(fr, 'Отделы'))
 
 
-show_dict = tk.Menu(main_menu, tearoff=0)
-show_dict.add_command(label='Словарь рабочих', command=lambda: show_dict_workers(fr))
-show_dict.add_command(label='Словарь детей рабочих', command=lambda: show_dict_children(fr))
-show_dict.add_command(label='Словарь отделений', command=lambda: show_dict_deps(fr))
-
-
-# Создание каскада для пункта меню "Нормализованные словари"
-show_dict = tk.Menu(main_menu, tearoff=0)
-show_dict.add_command(label='Словарь рабочих', command=lambda: show_dict_workers(fr))
-show_dict.add_command(label='Словарь детей рабочих', command=lambda: show_dict_children(fr))
-show_dict.add_command(label='Словарь отделений', command=lambda: show_dict_deps(fr))
-
-
 # Создание каскада для пункта меню "Нормализованные словари"
 show_dict = tk.Menu(main_menu, tearoff=0)
 show_dict.add_command(label='Словарь рабочих', command=lambda: show_dict_workers(fr))
@@ -87,20 +74,9 @@ text_report.add_command(label='Отчет по множеству атрибут
                         command=lambda: many_attr_search_filter(fr))
 
 
-help_menu = tk.Menu(main_menu, tearoff=0)
-help_menu.add_command(label='Руководство пользователя')
-help_menu.add_command(label='О приложении')
-
-
 # Создание пункта меню "Помощь"
 help_menu = tk.Menu(main_menu, tearoff=0)
-help_menu.add_command(label='Руководство пользователя', command=lambda: show_help(fr))
-help_menu.add_command(label='О приложении', command=lambda: show_info(fr))
-
-
-# Создание пункта меню "Помощь"
-help_menu = tk.Menu(main_menu, tearoff=0)
-help_menu.add_command(label='Руководство пользователя', command=lambda: show_help(fr))
+help_menu.add_command(label='Справка', command=lambda: show_help(fr))
 help_menu.add_command(label='О приложении', command=lambda: show_info(fr))
 
 
