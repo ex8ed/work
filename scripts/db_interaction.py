@@ -307,6 +307,7 @@ def remove_workers(index):
     """
     global workers
     workers = workers.drop(int(index)).reset_index(drop=True)
+    messagebox.showinfo("Info", "Поле успешно удалено")
     save()
 
 
@@ -323,6 +324,7 @@ def remove_children(index):
     """
     global children
     children = children.drop(int(index)).reset_index(drop=True)
+    messagebox.showinfo("Info", "Поле успешно удалено")
     save()
 
 
@@ -339,6 +341,7 @@ def remove_otdeli(index):
     """
     global otdeli
     otdeli = otdeli.drop(int(index)).reset_index(drop=True)
+    messagebox.showinfo("Info", "Поле успешно удалено")
     save()
 
 
