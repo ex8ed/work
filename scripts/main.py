@@ -16,6 +16,8 @@ from windows_creating import add_workers_row, add_children_row, \
 PTH = os.getcwd()
 os.chdir(PTH[:len(PTH) - 8])
 rt = tk.Tk()
+rt.title("Data Manager")
+rt.iconbitmap("./data/label_icon_1.ico")
 rt.geometry('980x600')
 rt.resizable(False, False)
 
