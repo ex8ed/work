@@ -318,6 +318,10 @@ def back_graph_rep(content):
         global reports
         dict_type = dict_combobox.get()
         graph_type = graph_combobox.get()
+        try:
+            rep_combobox.set('')
+        except:
+            pass
         if dict_type == 'Работники':
             if graph_type == 'Гистограмма':
                 reports = ['Гистограмма распределения рабочих по годам рождения',
@@ -332,9 +336,13 @@ def back_graph_rep(content):
                 reports = ['Гистограмма распределения детей по годам рождения']
             elif graph_type == 'Столбчатая диаграмма':
                 reports = ['Столбчатая диаграмма распределения детей по садикам']
+            else:
+                reports = []
         elif dict_type == 'Отделы':
             if graph_type == 'Столбчатая диаграмма':
                 reports = ['Столбчатая диаграмма распределения сотрудников по отделам']
+            else:
+                reports = []
         try:
             rep_combobox.configure(values=reports)
         except NameError:
@@ -344,7 +352,6 @@ def back_graph_rep(content):
         widget.destroy()
 
     reports = []
-
     dict_label = tk.Label(content, text='Выберите словарь', width=50)
     graph_label = tk.Label(content, text='Выберите тип графика', width=50)
     rep_label = tk.Label(content, text='Выберите графический отчет', width=50)
